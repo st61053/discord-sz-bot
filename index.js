@@ -1,7 +1,7 @@
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 const admin = require('firebase-admin');
 require('dotenv').config();
-const token = "MTA5NTkyODA0NjE3Njk4MDk5Mg.Gudx9r.Nh6pzOsxPeFMtT3fM6-B5MJh74dsNo4zCAE8to";
+const token = process.env.TOKEN;
 
 // Create a new client instance
 const client = new Client({ intents: [

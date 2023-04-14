@@ -35,7 +35,6 @@ client.on('messageCreate', async message => {
   const userRef = db.collection('users').doc(userId);
   await userRef.set({
     id: userId,
-    name: user.name,
     messageCount: admin.firestore.FieldValue.increment(1)
   }, { merge: true });
 
@@ -53,7 +52,7 @@ client.on('interactionCreate', (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === 'add') {
-    
+
   }
 
 })

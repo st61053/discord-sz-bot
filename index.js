@@ -98,10 +98,9 @@ client.on('interactionCreate', async (interaction) => {
         const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
 
         fields.push({
-          name: await client.users.fetch(data.id),
+          name: (await client.users.fetch(data.id)).username,
           value: `${data.messageCount} fazol${lang}`
         });
-        console.log(data);
       });
 
       const embed = {

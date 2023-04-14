@@ -98,7 +98,7 @@ client.on('interactionCreate', async (interaction) => {
           const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
 
           fields.push({
-            name: user,
+            name: user.username,
             value: `${data.messageCount} fazol${lang}`
           });
 

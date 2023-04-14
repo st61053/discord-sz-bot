@@ -102,17 +102,19 @@ client.on('interactionCreate', async (interaction) => {
           value: `${data.messageCount} fazol${lang}`
         });
       });
+
+      const embed = {
+        title: "Stav fazolí",
+        fields: fields,
+      }
+  
+      interaction.reply({ embeds: [embed] });
+      
     })
     .catch((error) => {
       console.log("Error getting documents: ", error);
     });
 
-    const embed = {
-      title: "Stav fazolí",
-      fields: fields,
-    }
-
-    interaction.reply({ embeds: [embed] });
   }
 
 })

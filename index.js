@@ -1,4 +1,4 @@
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+const { Client, Events, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const admin = require('firebase-admin');
 require('dotenv').config();
 const token = process.env.TOKEN;
@@ -57,30 +57,62 @@ client.on('interactionCreate', async (interaction) => {
     const userId = interaction.options.get('user').value;
     const points = interaction.options.get('points').value;
 
-      const userRef = db.collection('users').doc(userId);
-      await userRef.set({
-        id: userId,
-        messageCount: admin.firestore.FieldValue.increment(points)
-      }, { merge: true });
+    const userRef = db.collection('users').doc(userId);
+    await userRef.set({
+      id: userId,
+      messageCount: admin.firestore.FieldValue.increment(points)
+    }, { merge: true });
 
-      const user = await client.users.fetch(userId);
-      const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-      interaction.reply(`${user} dostal příděl **${points} fazol${lang}** od Bohů!`)
+    const user = await client.users.fetch(userId);
+    const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
+    interaction.reply(`${user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
   }
 
   if (interaction.commandName === 'remove') {
     const userId = interaction.options.get('user').value;
     const points = interaction.options.get('points').value;
 
-      const userRef = db.collection('users').doc(userId);
-      await userRef.set({
-        id: userId,
-        messageCount: admin.firestore.FieldValue.increment(-points)
-      }, { merge: true });
+    const userRef = db.collection('users').doc(userId);
+    await userRef.set({
+      id: userId,
+      messageCount: admin.firestore.FieldValue.increment(-points)
+    }, { merge: true });
 
-      const user = await client.users.fetch(userId);
-      const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-      interaction.reply(`${user} si rozhněval Bohy a ztratil **${points} fazol${lang}**!`)
+    const user = await client.users.fetch(userId);
+    const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
+    interaction.reply(`${user} si rozhněval Bohy a ztratil  **${points} fazol${lang}** !`)
+  }
+
+  if (interaction.commandName === 'get') {
+
+    const pointsRef = db.collection('users');
+
+    const fields = [];
+
+    pointsRef.get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach(async (doc) => {
+        // Access data for each document
+        const data = doc.data();
+        const user = await client.users.fetch(data.id);
+        const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
+
+        fields.push({
+          name: user,
+          value: `${data.messageCount} fazol${lang}`
+        });
+      });
+    })
+    .catch((error) => {
+      console.log("Error getting documents: ", error);
+    });
+
+    const embed = {
+      title: "Stav fazolí",
+      fields: fields,
+    }
+
+    interaction.reply({ embeds: [embed] });
   }
 
 })

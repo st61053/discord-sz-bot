@@ -38,6 +38,10 @@ const commands = [
             },
         ]
     },
+    {
+        name: "get",
+        description: 'Get table of points',
+    },
 ]
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);

@@ -98,7 +98,7 @@ client.on('interactionCreate', async (interaction) => {
           const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
 
           fields.push({
-            name: user.username,
+            name: user,
             value: `${data.messageCount} fazol${lang}`
           });
 
@@ -112,7 +112,8 @@ client.on('interactionCreate', async (interaction) => {
           fields: fields,
         }
 
-        interaction.reply({ embeds: [embed] });
+        // interaction.reply({ embeds: [embed] });
+        interaction.reply(fields.forEach((field) => `${field.user}\t\t${value}`))
       })
       .catch((error) => {
         console.log("Error getting documents: ", error);

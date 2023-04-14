@@ -57,9 +57,9 @@ client.on('interactionCreate', async (interaction) => {
     const user = interaction.options.get('user').value;
     const points = interaction.options.get('points').value;
 
-      const userRef = db.collection('users').doc(user.id);
+      const userRef = db.collection('users').doc(user);
       await userRef.set({
-        id: user.id,
+        id: user,
         messageCount: admin.firestore.FieldValue.increment(points)
       }, { merge: true });
 

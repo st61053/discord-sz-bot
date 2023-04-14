@@ -30,7 +30,6 @@ client.on('messageCreate', async message => {
   }
 
   const userId = message.author.id;
-  const user = await client.users.fetch(userId);
 
   const userRef = db.collection('users').doc(userId);
   await userRef.set({
@@ -39,11 +38,12 @@ client.on('messageCreate', async message => {
   }, { merge: true });
 
   const userDoc = await userRef.get();
-
+  const user = await client.users.fetch(userId);
+  
   // const channel = message.client.channels.cache.get('1096374648624652318');
   // await channel.send(`${user} poslal/a zprávu! Počet bodů: ${userDoc.data().messageCount}`);
 
-    console.log(`${user.name} poslal/a zprávu! Počet bodů za aktivitu: ${userDoc.data().messageCount}`);
+    console.log(`${user} poslal/a zprávu! Počet bodů za aktivitu: ${userDoc.data().messageCount}`);
 
 });
 

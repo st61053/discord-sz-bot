@@ -94,11 +94,11 @@ client.on('interactionCreate', async (interaction) => {
       querySnapshot.forEach(async (doc) => {
         // Access data for each document
         const data = doc.data();
-        const user = client.users.fetch(data.id);
+        // const user = client.users.fetch(data.id);
         const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
 
         fields.push({
-          name: user,
+          name: await client.users.fetch(data.id),
           value: `${data.messageCount} fazol${lang}`
         });
         console.log(data);

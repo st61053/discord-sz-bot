@@ -19,8 +19,6 @@ admin.initializeApp({
 // Get a Firestore reference
 const db = admin.firestore();
 
-// When the client is ready, run this code (only once)
-// We use 'c' for the event parameter to keep it separate from the already defined 'client'
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 });
@@ -31,24 +29,34 @@ client.on('messageCreate', async message => {
     return;
   }
 
-  // Increment the message count for this user
   const userId = message.author.id;
+  const user = await client.users.fetch(userId);
+
   const userRef = db.collection('users').doc(userId);
   await userRef.set({
     id: userId,
+    name: user.name,
     messageCount: admin.firestore.FieldValue.increment(1)
   }, { merge: true });
 
-  // Log the message count to the console
   const userDoc = await userRef.get();
-  const user = await client.users.fetch(userId);
 
   // const channel = message.client.channels.cache.get('1096374648624652318');
   // await channel.send(`${user} poslal/a zprávu! Počet bodů: ${userDoc.data().messageCount}`);
-  
-    console.log(`${user} poslal/a zprávu! Počet bodů: ${userDoc.data().messageCount}`);
+
+    console.log(`${user.name} poslal/a zprávu! Počet bodů za aktivitu: ${userDoc.data().messageCount}`);
 
 });
+
+// commands
+client.on('interactionCreate', (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === 'add') {
+    
+  }
+
+})
 
 // Log in to Discord with your client's token
 client.login(token);

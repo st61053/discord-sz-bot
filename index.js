@@ -54,14 +54,16 @@ client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === 'add') {
-    const user = interaction.options.get('user').value;
+    const userId = interaction.options.get('user').value;
     const points = interaction.options.get('points').value;
 
-      const userRef = db.collection('users').doc(user);
+      const userRef = db.collection('users').doc(userId);
       await userRef.set({
-        id: user,
+        id: userId,
         messageCount: admin.firestore.FieldValue.increment(points)
       }, { merge: true });
+
+      const user = await client.users.fetch(userId);
 
       interaction.reply(`${user} dostal příděl ${points} bodů od Bohů!`)
   }

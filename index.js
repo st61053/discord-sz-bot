@@ -112,7 +112,7 @@ client.on('interactionCreate', async (interaction) => {
           fields: fields,
         }
 
-        const reply = "";
+        let reply = "";
         fields.forEach((field) => reply += `${field.user}\t\t${field.value}\n`);
 
         // interaction.reply({ embeds: [embed] });

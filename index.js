@@ -65,7 +65,7 @@ client.on('interactionCreate', async (interaction) => {
 
       const user = await client.users.fetch(userId);
       const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-      interaction.reply(`${user} dostal příděl ${points} fazol${lang} od Bohů!`)
+      interaction.reply(`${user} dostal příděl **${points} fazol${lang}** od Bohů!`)
   }
 
   if (interaction.commandName === 'remove') {
@@ -80,7 +80,7 @@ client.on('interactionCreate', async (interaction) => {
 
       const user = await client.users.fetch(userId);
       const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-      interaction.reply(`${user} si rozhněval Bohy a ztratil ${points} fazol${lang}!`)
+      interaction.reply(`${user} si rozhněval Bohy a ztratil **${points} fazol${lang}**!`)
   }
 
 })

@@ -112,8 +112,11 @@ client.on('interactionCreate', async (interaction) => {
           fields: fields,
         }
 
+        const reply = "";
+        fields.forEach((field) => reply += `${field.user}\t\t${field.value}\n`);
+
         // interaction.reply({ embeds: [embed] });
-        interaction.reply(fields.forEach((field) => `${field.user}\t\t${field.value}\n`))
+        interaction.reply(reply);
       })
       .catch((error) => {
         console.log("Error getting documents: ", error);

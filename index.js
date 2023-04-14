@@ -94,22 +94,23 @@ client.on('interactionCreate', async (interaction) => {
       querySnapshot.forEach(async (doc) => {
         // Access data for each document
         const data = doc.data();
-        const user = await client.users.fetch(data.id);
-        const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
+        // const user = await client.users.fetch(data.id);
+        // const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
 
-        fields.push({
-          name: user,
-          value: `${data.messageCount} fazol${lang}`
-        });
+        // fields.push({
+        //   name: user,
+        //   value: `${data.messageCount} fazol${lang}`
+        // });
+        console.log(data);
       });
 
-      const embed = {
-        title: "Stav fazolí",
-        fields: fields,
-      }
+      // const embed = {
+      //   title: "Stav fazolí",
+      //   fields: fields,
+      // }
   
-      interaction.reply({ embeds: [embed] });
-      
+      // interaction.reply({ embeds: [embed] });
+
     })
     .catch((error) => {
       console.log("Error getting documents: ", error);

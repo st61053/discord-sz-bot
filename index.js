@@ -86,7 +86,8 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.commandName === 'get') {
 
     const pointsRef = db.collection('users');
-    let reply = "";
+
+    const fields = [];
 
     pointsRef.get()
       .then((querySnapshot) => {
@@ -95,14 +96,23 @@ client.on('interactionCreate', async (interaction) => {
           const data = doc.data();
           const user = await client.users.fetch(data.id);
           const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
-          reply += `${user}\t\t\t${data.messageCount} fazol${lang}\n`
+
+          fields.push({
+            name: user.username,
+            value: `${data.messageCount} fazol${lang}`
+          });
 
           console.log(user);
 
         });
 
       }).then(() => {
-        interaction.reply(reply);
+        const embed = {
+          title: "Stav fazolí",
+          fields: fields,
+        }
+
+        interaction.reply({ embeds: [embed] });
       })
       .catch((error) => {
         console.log("Error getting documents: ", error);

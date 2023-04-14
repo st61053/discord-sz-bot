@@ -75,7 +75,7 @@ client.on('interactionCreate', async (interaction) => {
       const userRef = db.collection('users').doc(userId);
       await userRef.set({
         id: userId,
-        messageCount: admin.firestore.FieldValue.increment(points)
+        messageCount: admin.firestore.FieldValue.decrement(points)
       }, { merge: true });
 
       const user = await client.users.fetch(userId);

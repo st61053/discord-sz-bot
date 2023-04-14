@@ -4,10 +4,12 @@ require('dotenv').config();
 const token = process.env.TOKEN;
 
 // Create a new client instance
-const client = new Client({ intents: [
+const client = new Client({
+  intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-] });
+  ]
+});
 
 // Initialize the Firebase Admin SDK
 const serviceAccount = require('./serviceAccountKey.json');
@@ -20,39 +22,48 @@ admin.initializeApp({
 const db = admin.firestore();
 
 client.once(Events.ClientReady, c => {
-	console.log(`Ready! Logged in as ${c.user.tag}`);
+  console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
-client.on('messageCreate', async message => {
-  // Ignore messages from bots and system messages
-  if (message.author.bot || message.system) {
-    return;
-  }
+// client.on('messageCreate', async message => {
+//   // Ignore messages from bots and system messages
+//   if (message.author.bot || message.system) {
+//     return;
+//   }
 
-  const userId = message.author.id;
+//   const userId = message.author.id;
 
-  const userRef = db.collection('users').doc(userId);
-  await userRef.set({
-    id: userId,
-    messageCount: admin.firestore.FieldValue.increment(1)
-  }, { merge: true });
+//   const userRef = db.collection('users').doc(userId);
+//   await userRef.set({
+//     id: userId,
+//     messageCount: admin.firestore.FieldValue.increment(1)
+//   }, { merge: true });
 
-  const userDoc = await userRef.get();
-  const user = await client.users.fetch(userId);
-  
-  // const channel = message.client.channels.cache.get('1096374648624652318');
-  // await channel.send(`${user} poslal/a zprávu! Počet bodů: ${userDoc.data().messageCount}`);
+//   const userDoc = await userRef.get();
+//   const user = await client.users.fetch(userId);
 
-    console.log(`${user} poslal/a zprávu! Počet bodů za aktivitu: ${userDoc.data().messageCount}`);
+//   // const channel = message.client.channels.cache.get('1096374648624652318');
+//   // await channel.send(`${user} poslal/a zprávu! Počet bodů: ${userDoc.data().messageCount}`);
 
-});
+//     console.log(`${user} poslal/a zprávu! Počet bodů za aktivitu: ${userDoc.data().messageCount}`);
+
+// });
 
 // commands
-client.on('interactionCreate', (interaction) => {
+client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === 'add') {
+    const user = interaction.options.get('user').value;
+    const points = interaction.options.get('points').value;
 
+      const userRef = db.collection('users').doc(userId);
+      await userRef.set({
+        id: user.id,
+        messageCount: admin.firestore.FieldValue.increment(points)
+      }, { merge: true });
+
+      interaction.reply(`${user} dostal příděl ${points} bodů od Bohů!`)
   }
 
 })

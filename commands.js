@@ -1,10 +1,42 @@
 require('dotenv').config();
-const { REST, Routes } = require('discord.js');
+const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
 
 const commands = [
     {
         name: "add",
         description: 'Add points to user',
+        options: [
+            {
+                name: 'user',
+                description: "user",
+                type: ApplicationCommandOptionType.User,
+                required: true,
+            },
+            {
+                name: 'points',
+                description: "points",
+                type: ApplicationCommandOptionType.Number,
+                required: true,
+            },
+        ]
+    },
+    {
+        name: "remove",
+        description: 'Remove points to user',
+        options: [
+            {
+                name: 'user',
+                description: "user",
+                type: ApplicationCommandOptionType.User,
+                required: true,
+            },
+            {
+                name: 'points',
+                description: "points",
+                type: ApplicationCommandOptionType.Number,
+                required: true,
+            },
+        ]
     },
 ]
 
@@ -22,4 +54,4 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
     } catch (error) {
         console.log(`There was an error: ${error}`)
     }
-})
+})();

@@ -64,8 +64,23 @@ client.on('interactionCreate', async (interaction) => {
       }, { merge: true });
 
       const user = await client.users.fetch(userId);
+      const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
+      interaction.reply(`${user} dostal příděl ${points} fazol${lang} od Bohů!`)
+  }
 
-      interaction.reply(`${user} dostal příděl ${points} bodů od Bohů!`)
+  if (interaction.commandName === 'remove') {
+    const userId = interaction.options.get('user').value;
+    const points = interaction.options.get('points').value;
+
+      const userRef = db.collection('users').doc(userId);
+      await userRef.set({
+        id: userId,
+        messageCount: admin.firestore.FieldValue.increment(points)
+      }, { merge: true });
+
+      const user = await client.users.fetch(userId);
+      const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
+      interaction.reply(`${user} si rozhněval Bohy a ztratil ${points} fazol${lang}!`)
   }
 
 })

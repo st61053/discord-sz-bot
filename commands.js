@@ -18,7 +18,7 @@ const commands = [
                 type: ApplicationCommandOptionType.Number,
                 required: true,
             },
-        ]
+        ],
     },
     {
         name: "remove",

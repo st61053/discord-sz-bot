@@ -90,33 +90,33 @@ client.on('interactionCreate', async (interaction) => {
     const fields = [];
 
     pointsRef.get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach(async (doc) => {
-        // Access data for each document
-        const data = doc.data();
-        const user = await client.users.fetch(data.id);
-        const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
+      .then((querySnapshot) => {
+        querySnapshot.forEach(async (doc) => {
+          // Access data for each document
+          const data = doc.data();
+          const user = await client.users.fetch(data.id);
+          const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
 
-        fields.push({
-          name: user.username,
-          value: `${data.messageCount} fazol${lang}`
+          fields.push({
+            name: user,
+            value: `${data.messageCount} fazol${lang}`
+          });
+
+          console.log(user);
+
         });
 
-        console.log(user.username);
+      }).then(() => {
+        const embed = {
+          title: "Stav fazolí",
+          fields: fields,
+        }
 
+        interaction.reply({ embeds: [embed] });
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
       });
-
-      const embed = {
-        title: "Stav fazolí",
-        fields: fields,
-      }
-  
-      interaction.reply({ embeds: [embed] });
-
-    })
-    .catch((error) => {
-      console.log("Error getting documents: ", error);
-    });
 
   }
 

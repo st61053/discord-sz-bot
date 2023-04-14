@@ -46,6 +46,7 @@ client.on('messageCreate', async message => {
   const channel = message.client.channels.cache.get('1094501107503464488');
 
     await channel.send(`${user} poslal/a zprávu! Počet bodů: ${userDoc.data().messageCount}`);
+    console.log(`${user} poslal/a zprávu! Počet bodů: ${userDoc.data().messageCount}`);
 
 });
 

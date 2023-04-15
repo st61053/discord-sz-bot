@@ -11,6 +11,8 @@ const client = new Client({
   ]
 });
 
+let guild;
+
 // Initialize the Firebase Admin SDK
 const serviceAccount = require('./serviceAccountKey.json');
 admin.initializeApp({
@@ -23,7 +25,10 @@ const db = admin.firestore();
 
 client.once(Events.ClientReady, c => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
+  guild = client.guilds.cache.get(process.env.GUILD_ID) // get the guild object
 });
+
+
 
 // client.on('messageCreate', async message => {
 //   // Ignore messages from bots and system messages
@@ -88,6 +93,7 @@ client.on('interactionCreate', async (interaction) => {
     const pointsRef = db.collection('users');
 
     const fields = [];
+    let obj;
 
     pointsRef.get()
       .then((querySnapshot) => {
@@ -96,23 +102,38 @@ client.on('interactionCreate', async (interaction) => {
           const data = doc.data();
           const user = await client.users.fetch(data.id);
           const lang = data.messageCount === 0 ? "í" : data.messageCount > -5 && data.messageCount < 5 ? "e" : "í";
-
           fields.push({
-            name: user.username,
+            name: user,
             value: `${data.messageCount} fazol${lang}`
           });
 
-          console.log(user);
+        });
+      })
+      .then(() => {
 
+        let reply = "\n\n**Stav fazolí:**\n\n";
+
+        fields.forEach((field) => {
+          const name = String(field.name); // ensure name is a string
+          const value = field.value;
+
+          // const guild = client.guilds.cache.get(process.env.GUILD_ID);
+
+          // // Fetch the member object of the user in the guild
+          // const member = guild.members.cache.get(field.name.id);
+
+          // // Get the nickname of the user in the guild, if any
+          // const nickname = member ? member.nickname : field.name.username;
+          // console.log(nickname);
+
+
+          reply += `${name}\t**${value}**\n`;
         });
 
-      }).then(() => {
-        const embed = {
-          title: "Stav fazolí",
-          fields: fields,
-        }
 
-        interaction.reply({ embeds: [embed] });
+
+        interaction.reply(`${reply}`);
+
       })
       .catch((error) => {
         console.log("Error getting documents: ", error);

@@ -43,15 +43,15 @@ const commands = [
         description: 'Get a table of points',
     },
     {
-        name: "showA",
+        name: "get-aztecs-points",
         description: 'Get a table of points for the Aztecs',
     },
     {
-        name: "showM",
+        name: "get-mayans-points",
         description: 'Get a table of points for the Mayans',
     },
     {
-        name: "showI",
+        name: "get-incas-points",
         description: 'Get a table of points for the Incas',
     },
 ]

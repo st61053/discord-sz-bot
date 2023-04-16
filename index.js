@@ -159,7 +159,7 @@ client.on('interactionCreate', async (interaction) => {
 
   }
 
-  if (interaction.commandName === 'showA' || interaction.commandName === 'showI' || interaction.commandName === 'showM') {
+  if (interaction.commandName === 'get-aztecs-points' || interaction.commandName === 'get-incas-points' || interaction.commandName === 'get-mayans-points') {
 
     const pointsRef = db.collection('users');
 
@@ -207,7 +207,7 @@ client.on('interactionCreate', async (interaction) => {
 
         }).then(() => {
           
-          const id = interaction.commandName === 'showA' ? 1096512802291716230 : interaction.commandName === 'showM' ? 1096512941899129032 : 1096513016960389130; 
+          const id = interaction.commandName === 'get-aztecs-points' ? 1096512802291716230 : interaction.commandName === 'get-mayans-points' ? 1096512941899129032 : 1096513016960389130; 
           Object.keys(results).forEach((key) => {
             if (key === id) {
             reply += `${results[key]?.roleObject} ové - celkem **${getLang(results[key]?.user.reduce((prev, user) => prev + user.value, 0))}**\n`;

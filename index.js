@@ -121,7 +121,7 @@ client.on('interactionCreate', async (interaction) => {
       })
         .then(async (fields) => {
 
-          console.log(fields);
+          //console.log(fields);
 
           results = interaction.guild.roles.cache
             .filter(role => role.name === 'azték' || role.name === 'may' || role.name === 'ink')

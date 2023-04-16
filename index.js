@@ -135,7 +135,7 @@ client.on('interactionCreate', async (interaction) => {
               return field.role === key;
             });
           })).then(() => {
-            console.log(results); // or do something else with the results
+            // console.log(results); // or do something else with the results
           }).catch((error) => {
             console.error(error); // handle the error appropriately
           });

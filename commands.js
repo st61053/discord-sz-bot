@@ -40,7 +40,19 @@ const commands = [
     },
     {
         name: "get",
-        description: 'Get table of points',
+        description: 'Get a table of points',
+    },
+    {
+        name: "showA",
+        description: 'Get a table of points for the Aztecs',
+    },
+    {
+        name: "showM",
+        description: 'Get a table of points for the Mayans',
+    },
+    {
+        name: "showI",
+        description: 'Get a table of points for the Incas',
     },
 ]
 

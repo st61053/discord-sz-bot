@@ -159,6 +159,74 @@ client.on('interactionCreate', async (interaction) => {
 
   }
 
+  if (interaction.commandName === 'getA' || interaction.commandName === 'getI' || interaction.commandName === 'getM') {
+
+    const pointsRef = db.collection('users');
+
+    // const fields = [];
+    let reply = "\n\n**Stav fazolí:**\n\n";
+    let results = {};
+    const guild = await interaction.guild;
+
+    if (guild) {
+      pointsRef.get()
+      .then((querySnapshot) => {
+        const promises = querySnapshot.docs.map(async (doc) => {
+          const data = doc.data();
+          const user = await client.users.fetch(data.id);
+          const member = await guild.members.fetch(`${data.id}`);
+          const role = await member?.roles.cache.find((role) => role.name === 'azték' || role.name === 'may' || role.name === 'ink')?.id;
+          return {
+            user: user,
+            value: data.messageCount,
+            role: role
+          };
+        });
+        return Promise.all(promises);
+      })
+        .then(async (fields) => {
+
+          //console.log(fields);
+
+          results = interaction.guild.roles.cache
+            .filter(role => role.name === 'azték' || role.name === 'may' || role.name === 'ink')
+            .reduce((prev, role) => {
+              prev[role.id] = { roleObject: role};
+              return prev;
+            }, {})
+
+          Promise.all(Object.keys(results).map(async (key) => {
+            results[key]["user"] = fields.filter((field) => {
+              return field.role === key;
+            });
+          })).then(() => {
+            // console.log(results); // or do something else with the results
+          }).catch((error) => {
+            console.error(error); // handle the error appropriately
+          });
+
+        }).then(() => {
+          
+          const id = interaction.commandName === 'getA' ? 1096512802291716230 : interaction.commandName === 'getM' ? 1096512941899129032 : 1096513016960389130; 
+          Object.keys(results).forEach((key) => {
+            if (key === id) {
+            reply += `${results[key]?.roleObject} ové - celkem **${getLang(results[key]?.user.reduce((prev, user) => prev + user.value, 0))}**\n`;
+            reply += `---------------------------------------\n`;
+            results[key]?.user.forEach((user) => reply += `${user.user}\t**${getLang(user.value)}**\n`)
+            reply += `---------------------------------------\n\n`;
+            }
+          })
+
+
+          interaction.reply(`${reply}`)
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    }
+
+  }
+
 })
 
 // Log in to Discord with your client's token

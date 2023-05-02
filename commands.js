@@ -54,6 +54,18 @@ const commands = [
         name: "get-incas-points",
         description: 'Get a table of points for the Incas',
     },
+    {
+        name: "answer",
+        description: 'Answer the question',
+        options: [
+            {
+                name: 'answer',
+                description: "answer",
+                type: ApplicationCommandOptionType.String,
+                required: true,
+            },
+        ]
+    },
 ]
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);

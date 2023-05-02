@@ -278,8 +278,6 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.commandName === "answer") {
 
-    const channel = client.channels.cache.get('1099363680065433600');
-
     const azt = client.channels.cache.get('1096512802291716230');
     const may = client.channels.cache.get('1096512941899129032');
     const inc = client.channels.cache.get('1096513016960389130');
@@ -317,7 +315,7 @@ client.on('interactionCreate', async (interaction) => {
           interaction.reply("Na dnešní otázku už bylo odpovězeno.");
         }
       } else {
-        interaction.reply("Není tu nic, na co by se dalo odpovědět.");
+        interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
       }
     }
 
@@ -352,7 +350,7 @@ client.on('interactionCreate', async (interaction) => {
           interaction.reply("Na dnešní otázku už bylo odpovězeno.");
         }
       } else {
-        interaction.reply("Není tu nic, na co by se dalo odpovědět.");
+        interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
       }
     }
 
@@ -387,7 +385,7 @@ client.on('interactionCreate', async (interaction) => {
           interaction.reply("Na dnešní otázku už bylo odpovězeno.");
         }
       } else {
-        interaction.reply("Není tu nic, na co by se dalo odpovědět.");
+        interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
       }
     }
   }

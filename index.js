@@ -14,6 +14,11 @@ let aztTry = 0;
 let mayTry = 0;
 let incTry = 0;
 
+const reward = [30, 25, 20, 15, 10];
+const answerPlayers = [];
+const winnerCount = 0;
+const playerTrys = {};
+
 // Create a new client instance
 const client = new Client({
   intents: [
@@ -38,9 +43,17 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('15 22 * * *', () => {
+// cron.schedule('15 22 * * *', () => {
+//   if (detective) {
+//     detectivePike();
+//   }
+// }, {
+//   timezone: "Europe/Berlin"
+// });
+
+cron.schedule('25 0 * * *', () => {
   if (detective) {
-    detectivePike();
+    detectivePike2();
   }
 }, {
   timezone: "Europe/Berlin"
@@ -89,6 +102,53 @@ const detectivePike = () => {
         inc.send(`${reply}`);
 
         // adm.send(`${reply}`);
+
+        const questRef = db.collection("questions").doc(q.id);
+        await questRef.set({
+          ...q,
+          state: false
+        }, { merge: true });
+
+        setTimeout(() => {
+          answer = null;
+          answerPlayers = [];
+          winnerCount = 0;
+          playerTrys = {};
+          console.log("Reset daily answer");
+        }, 60 * 60 * 1000);
+
+      }
+
+    })
+    .catch((error) => {
+      console.log("Error getting documents: ", error);
+    });
+
+}
+
+const detektivePike2 = () => {
+  const channel = client.channels.cache.get('1103795567450144829');
+
+  const questionsRef = db.collection('questions');
+  questionsRef.get()
+    .then(async (querySnapshot) => {
+      const questions = [];
+      querySnapshot.forEach((doc) => {
+        questions.push({ id: doc.id, ...doc.data() });
+      });
+
+      const q = questions.find((quest) => quest.state);
+
+      if (q) {
+        answer = q.a.toLocaleLowerCase();
+        // Do something with the array of documents
+        console.log(`Today question: ${q.q}`);
+
+        let reply = "@azték @may @ink\n";
+        reply += "**Dnešní otázka zní:**\n";
+        reply += `${q.q}`;
+
+        channel.send(`${reply}`);
 
         const questRef = db.collection("questions").doc(q.id);
         await questRef.set({
@@ -282,116 +342,162 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.commandName === "answer") {
 
-    const azt = client.channels.cache.get('1096512529917808771');
-    const may = client.channels.cache.get('1096512591846707200');
-    const inc = client.channels.cache.get('1096512657684709386');
+    // const azt = client.channels.cache.get('1096512529917808771');
+    // const may = client.channels.cache.get('1096512591846707200');
+    // const inc = client.channels.cache.get('1096512657684709386');
+
+    const channel = client.channels.cache.get('1103795567450144829');
 
     const userAnswer = interaction.options.get('answer').value;
 
-    if (interaction.channel === azt) {
+    if (interaction.channel === channel) {
       if (answer) {
-        if (!aztAnswer) {
-          if (aztTry < 3) {
-            if (answer === userAnswer.toLocaleLowerCase()) {
+        if (!answerPlayers.find(interaction.user.id)) {
+          if (winnerCount < 5) {
+            if (playerTrys[interaction.user.id] < 3) {
+              if (answer === userAnswer.toLocaleLowerCase()) {
 
-              const points = 10;
+                const userRef = db.collection('users').doc(interaction.user.id);
+                await userRef.set({
+                  id: interaction.user.id,
+                  messageCount: admin.firestore.FieldValue.increment(reward[winnerCount])
+                }, { merge: true });
 
-              const userRef = db.collection('users').doc(interaction.user.id);
-              await userRef.set({
-                id: interaction.user.id,
-                messageCount: admin.firestore.FieldValue.increment(points)
-              }, { merge: true });
+                const lang = reward[winnerCount] === 1 ? "i" : reward[winnerCount] < 5 ? "e" : "í";
+                interaction.reply(`${interaction.user} dostal příděl  **${reward[winnerCount]} fazol${lang}** od Bohů !`)
 
+                answerPlayers.push(interaction.user.id);
+                winnerCount++;
 
-              const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-              interaction.reply(`${interaction.user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
-
-              aztAnswer = true;
+              } else {
+                if (!playerTrys[interaction.user.id]) {
+                  playerTrys[interaction.user.id] = 0;
+                } else {
+                  playerTrys[interaction.user.id]++;
+                }
+                playerTrys[interaction.user.id]++;
+                interaction.reply(`${interaction.user} Špatná odpověď - ${playerTrys[interaction.user.id]}/3`);
+              }
             } else {
-              aztTry++;
-              interaction.reply(`Špatná odpověď - ${aztTry}/3`);
+              interaction.reply(`${interaction.user} Byl vyčerpán limit pokusů na odpověď.`);
             }
+
           } else {
-            interaction.reply("Byl vyčerpán limit pokusů na odpověď.");
+            interaction.reply("Na dnešní otázku už bylo odpovězeno.");
           }
 
         } else {
-          interaction.reply("Na dnešní otázku už bylo odpovězeno.");
+          interaction.reply("Za dnešní otázku už si získal/a fazolky.");
         }
       } else {
         interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
       }
     }
 
-    if (interaction.channel === may) {
-      if (answer) {
-        if (!mayAnswer) {
-          if (mayTry < 3) {
-            if (answer === userAnswer.toLocaleLowerCase()) {
+    //   if (interaction.channel === azt) {
+    //     if (answer) {
+    //       if (!aztAnswer) {
+    //         if (aztTry < 3) {
+    //           if (answer === userAnswer.toLocaleLowerCase()) {
 
-              const points = 10;
+    //             const points = 10;
 
-              const userRef = db.collection('users').doc(interaction.user.id);
-              await userRef.set({
-                id: interaction.user.id,
-                messageCount: admin.firestore.FieldValue.increment(points)
-              }, { merge: true });
-
-
-              const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-              interaction.reply(`${interaction.user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
-
-              mayAnswer = true;
-            } else {
-              mayTry++;
-              interaction.reply(`Špatná odpověď - ${mayTry}/3`);
-            }
-          } else {
-            interaction.reply("Byl vyčerpán limit pokusů na odpověď.");
-          }
-
-        } else {
-          interaction.reply("Na dnešní otázku už bylo odpovězeno.");
-        }
-      } else {
-        interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
-      }
-    }
-
-    if (interaction.channel === inc) {
-      if (answer) {
-        if (!incAnswer) {
-          if (incTry < 3) {
-            if (answer === userAnswer.toLocaleLowerCase()) {
-
-              const points = 10;
-
-              const userRef = db.collection('users').doc(interaction.user.id);
-              await userRef.set({
-                id: interaction.user.id,
-                messageCount: admin.firestore.FieldValue.increment(points)
-              }, { merge: true });
+    //             const userRef = db.collection('users').doc(interaction.user.id);
+    //             await userRef.set({
+    //               id: interaction.user.id,
+    //               messageCount: admin.firestore.FieldValue.increment(points)
+    //             }, { merge: true });
 
 
-              const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-              interaction.reply(`${interaction.user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
+    //             const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
+    //             interaction.reply(`${interaction.user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
 
-              incAnswer = true;
-            } else {
-              incTry++;
-              interaction.reply(`Špatná odpověď - ${incTry}/3`);
-            }
-          } else {
-            interaction.reply("Byl vyčerpán limit pokusů na odpověď.");
-          }
+    //             aztAnswer = true;
+    //           } else {
+    //             aztTry++;
+    //             interaction.reply(`Špatná odpověď - ${aztTry}/3`);
+    //           }
+    //         } else {
+    //           interaction.reply("Byl vyčerpán limit pokusů na odpověď.");
+    //         }
 
-        } else {
-          interaction.reply("Na dnešní otázku už bylo odpovězeno.");
-        }
-      } else {
-        interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
-      }
-    }
+    //       } else {
+    //         interaction.reply("Na dnešní otázku už bylo odpovězeno.");
+    //       }
+    //     } else {
+    //       interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
+    //     }
+    //   }
+
+    //   if (interaction.channel === may) {
+    //     if (answer) {
+    //       if (!mayAnswer) {
+    //         if (mayTry < 3) {
+    //           if (answer === userAnswer.toLocaleLowerCase()) {
+
+    //             const points = 10;
+
+    //             const userRef = db.collection('users').doc(interaction.user.id);
+    //             await userRef.set({
+    //               id: interaction.user.id,
+    //               messageCount: admin.firestore.FieldValue.increment(points)
+    //             }, { merge: true });
+
+
+    //             const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
+    //             interaction.reply(`${interaction.user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
+
+    //             mayAnswer = true;
+    //           } else {
+    //             mayTry++;
+    //             interaction.reply(`Špatná odpověď - ${mayTry}/3`);
+    //           }
+    //         } else {
+    //           interaction.reply("Byl vyčerpán limit pokusů na odpověď.");
+    //         }
+
+    //       } else {
+    //         interaction.reply("Na dnešní otázku už bylo odpovězeno.");
+    //       }
+    //     } else {
+    //       interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
+    //     }
+    //   }
+
+    //   if (interaction.channel === inc) {
+    //     if (answer) {
+    //       if (!incAnswer) {
+    //         if (incTry < 3) {
+    //           if (answer === userAnswer.toLocaleLowerCase()) {
+
+    //             const points = 10;
+
+    //             const userRef = db.collection('users').doc(interaction.user.id);
+    //             await userRef.set({
+    //               id: interaction.user.id,
+    //               messageCount: admin.firestore.FieldValue.increment(points)
+    //             }, { merge: true });
+
+
+    //             const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
+    //             interaction.reply(`${interaction.user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
+
+    //             incAnswer = true;
+    //           } else {
+    //             incTry++;
+    //             interaction.reply(`Špatná odpověď - ${incTry}/3`);
+    //           }
+    //         } else {
+    //           interaction.reply("Byl vyčerpán limit pokusů na odpověď.");
+    //         }
+
+    //       } else {
+    //         interaction.reply("Na dnešní otázku už bylo odpovězeno.");
+    //       }
+    //     } else {
+    //       interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
+    //     }
+    //   }
   }
 
 })

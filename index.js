@@ -38,10 +38,15 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('0 8 * * *', () => {
+cron.schedule('0 21 * * *', () => {
   if (detective) {
     detectivePike();
   }
+});
+
+cron.schedule('7 20 * * *', () => {
+  const channel = client.channels.cache.get('1099363680065433600');
+  channel.send(`Test`);
 });
 
 

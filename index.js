@@ -44,7 +44,7 @@ cron.schedule('0 21 * * *', () => {
   }
 });
 
-cron.schedule('12 20 * * *', () => {
+cron.schedule('* * * * *', () => {
   const channel = client.channels.cache.get('1099363680065433600');
   channel.send(`Test`);
 });

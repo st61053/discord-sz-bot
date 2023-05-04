@@ -38,7 +38,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('10 21 * * *', () => {
+cron.schedule('0 22 * * *', () => {
   if (detective) {
     detectivePike();
   }
@@ -46,12 +46,6 @@ cron.schedule('10 21 * * *', () => {
   timezone: "Europe/Berlin"
 });
 
-cron.schedule('30 20 * * *', () => {
-  const channel = client.channels.cache.get('1099363680065433600');
-  channel.send(`Test`);
-}, {
-  timezone: "Europe/Berlin"
-});
 
 
 const getLang = (value) => {

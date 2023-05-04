@@ -51,7 +51,7 @@ var cron = require('node-cron');
 //   timezone: "Europe/Berlin"
 // });
 
-cron.schedule('32 0 * * *', () => {
+cron.schedule('37 0 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -341,11 +341,6 @@ client.on('interactionCreate', async (interaction) => {
   }
 
   if (interaction.commandName === "answer") {
-
-    // const azt = client.channels.cache.get('1096512529917808771');
-    // const may = client.channels.cache.get('1096512591846707200');
-    // const inc = client.channels.cache.get('1096512657684709386');
-
     const channel = client.channels.cache.get('1103795567450144829');
 
     const userAnswer = interaction.options.get('answer').value;
@@ -354,7 +349,7 @@ client.on('interactionCreate', async (interaction) => {
       if (answer) {
         if (!answerPlayers.find((id) => id === interaction.user.id)) {
           if (winnerCount < 5) {
-            if (playerTrys[interaction.user.id] < 3) {
+            if (playerTrys[interaction.user.id] === undefined || playerTrys[interaction.user.id] < 3) {
               if (answer === userAnswer.toLocaleLowerCase()) {
 
                 const userRef = db.collection('users').doc(interaction.user.id);

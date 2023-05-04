@@ -6,10 +6,10 @@ const token = process.env.TOKEN;
 const detective = true;
 
 let answer = null;
-const reward = [30, 25, 20, 15, 10];
-const answerPlayers = [];
+let reward = [30, 25, 20, 15, 10];
+let answerPlayers = [];
 let winnerCount = 0;
-const playerTrys = {};
+let playerTrys = {};
 
 // Create a new client instance
 const client = new Client({
@@ -35,7 +35,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('6 1 * * *', () => {
+cron.schedule('12 1 * * *', () => {
   if (detective) {
     detektivePike2();
   }

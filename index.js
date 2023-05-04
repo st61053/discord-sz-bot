@@ -6,14 +6,6 @@ const token = process.env.TOKEN;
 const detective = true;
 
 let answer = null;
-let aztAnswer = false;
-let mayAnswer = false;
-let incAnswer = false;
-
-let aztTry = 0;
-let mayTry = 0;
-let incTry = 0;
-
 const reward = [30, 25, 20, 15, 10];
 const answerPlayers = [];
 let winnerCount = 0;
@@ -43,7 +35,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('50 0 * * *', () => {
+cron.schedule('6 1 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -88,11 +80,14 @@ const detektivePike2 = () => {
         }, { merge: true });
 
         setTimeout(() => {
-          answer = null;
-          answerPlayers = [];
-          winnerCount = 0;
-          playerTrys = {};
-          console.log("Reset daily answer");
+          if (answer) {
+            channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
+            answer = null;
+            answerPlayers = [];
+            winnerCount = 0;
+            playerTrys = {};
+            console.log("Reset daily answer");
+          }
         }, 60 * 60 * 1000);
 
       }
@@ -295,27 +290,35 @@ client.on('interactionCreate', async (interaction) => {
                 answerPlayers.push(interaction.user.id);
                 winnerCount++;
 
+                if (winnerCount === 1) {
+                  channel.send(`**Fazolky jsou rozdány!**\nSprávná odpověď byla: ${answer}`);
+                  answer = null;
+                  answerPlayers = [];
+                  winnerCount = 0;
+                  playerTrys = {};
+                }
+
               } else {
                 if (!playerTrys[interaction.user.id]) {
                   playerTrys[interaction.user.id] = 1;
                 } else {
                   playerTrys[interaction.user.id]++;
                 }
-                interaction.reply(`${interaction.user} Špatná odpověď - ${playerTrys[interaction.user.id]}/3`);
+                interaction.reply({ content: `Špatná odpověď - ${playerTrys[interaction.user.id]}/3`, ephemeral: true });
               }
             } else {
-              interaction.reply(`${interaction.user} Byl vyčerpán limit pokusů na odpověď.`);
+              interaction.reply({ content: `Byl vyčerpán limit pokusů na odpověď.`, ephemeral: true });
             }
 
           } else {
-            interaction.reply("Na dnešní otázku už bylo odpovězeno.");
+            interaction.reply({ content: "Na dnešní otázku už bylo odpovězeno.", ephemeral: true });
           }
 
         } else {
-          interaction.reply("Za dnešní otázku už si získal/a fazolky.");
+          interaction.reply({ content: "Za dnešní otázku už si získal/a fazolky.", ephemeral: true });
         }
       } else {
-        interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
+        interaction.reply({ content: "Není tu nic, na co by se dalo odpovědět.", ephemeral: true });
       }
     }
   }

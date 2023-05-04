@@ -51,7 +51,7 @@ var cron = require('node-cron');
 //   timezone: "Europe/Berlin"
 // });
 
-cron.schedule('37 0 * * *', () => {
+cron.schedule('42 0 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -144,8 +144,7 @@ const detektivePike2 = () => {
         // Do something with the array of documents
         console.log(`Today question: ${q.q}`);
 
-        let reply = "@azték @may @ink\n";
-        reply += "**Dnešní otázka zní:**\n";
+        const reply = "**Dnešní otázka zní:**\n";
         reply += `${q.q}`;
 
         channel.send(`${reply}`);
@@ -366,11 +365,10 @@ client.on('interactionCreate', async (interaction) => {
 
               } else {
                 if (!playerTrys[interaction.user.id]) {
-                  playerTrys[interaction.user.id] = 0;
+                  playerTrys[interaction.user.id] = 1;
                 } else {
                   playerTrys[interaction.user.id]++;
                 }
-                playerTrys[interaction.user.id]++;
                 interaction.reply(`${interaction.user} Špatná odpověď - ${playerTrys[interaction.user.id]}/3`);
               }
             } else {

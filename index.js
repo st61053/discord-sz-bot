@@ -35,7 +35,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('48 1 * * *', () => {
+cron.schedule('53 1 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -285,7 +285,7 @@ client.on('interactionCreate', async (interaction) => {
                 }, { merge: true });
 
                 const lang = reward[winnerCount] === 1 ? "i" : reward[winnerCount] < 5 ? "e" : "í";
-                interaction.reply({content: `${interaction.user} dostal příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`, ephemeral})
+                interaction.reply({content: `${interaction.user} dostal příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`, ephemeral: true})
                 channel.send(`${interaction.user} odpověděl/a správně!`);
 
                 answerPlayers.push(interaction.user);

@@ -44,9 +44,11 @@ cron.schedule('0 21 * * *', () => {
   }
 });
 
-cron.schedule('* * * * *', () => {
+cron.schedule('30 20 * * *', () => {
   const channel = client.channels.cache.get('1099363680065433600');
   channel.send(`Test`);
+}, {
+  timezone: "Europe/Berlin"
 });
 
 

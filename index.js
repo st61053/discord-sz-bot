@@ -79,9 +79,9 @@ const detectivePike = () => {
         // Send the message to the channel
         // channel.send(`${q.q}`);
 
-        let reply = "**Dněšní otázka zní:**\n\n";
+        let reply = "**Dnešní otázka zní:**\n\n";
         reply += `${q.q}`;
-        
+
         azt.send(`${reply}`);
         may.send(`${reply}`);
         inc.send(`${reply}`);

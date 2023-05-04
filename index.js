@@ -78,9 +78,13 @@ const detectivePike = () => {
 
         // Send the message to the channel
         // channel.send(`${q.q}`);
-        azt.send(`${q.q}`);
-        may.send(`${q.q}`);
-        inc.send(`${q.q}`);
+
+        let reply = "**Dněšní otázka zní:**\n\n";
+        reply += `${q.q}`;
+        
+        azt.send(`${reply}`);
+        may.send(`${reply}`);
+        inc.send(`${reply}`);
 
         const questRef = db.collection('questions').doc(q.id);
         await questRef.set({

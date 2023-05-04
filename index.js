@@ -6,7 +6,7 @@ const token = process.env.TOKEN;
 const detective = true;
 
 let answer = null;
-let reward = [30, 25, 20, 15, 10];
+let reward = [35, 30, 25, 20, 15, 10, 5];
 let answerPlayers = [];
 let winnerCount = 0;
 let playerTrys = {};
@@ -35,7 +35,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('12 1 * * *', () => {
+cron.schedule('0 16 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -274,7 +274,7 @@ client.on('interactionCreate', async (interaction) => {
     if (interaction.channel === channel) {
       if (answer) {
         if (!answerPlayers.find((id) => id === interaction.user.id)) {
-          if (winnerCount < 5) {
+          if (winnerCount < reward.length) {
             if (playerTrys[interaction.user.id] === undefined || playerTrys[interaction.user.id] < 3) {
               if (answer === userAnswer.toLocaleLowerCase()) {
 
@@ -285,12 +285,12 @@ client.on('interactionCreate', async (interaction) => {
                 }, { merge: true });
 
                 const lang = reward[winnerCount] === 1 ? "i" : reward[winnerCount] < 5 ? "e" : "í";
-                interaction.reply(`${interaction.user} dostal příděl  **${reward[winnerCount]} fazol${lang}** od Bohů !`)
+                interaction.reply(`${interaction.user} dostal příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`)
 
                 answerPlayers.push(interaction.user.id);
                 winnerCount++;
 
-                if (winnerCount === 1) {
+                if (winnerCount === reward.length) {
                   channel.send(`**Fazolky jsou rozdány!**\nSprávná odpověď byla: ${answer}`);
                   answer = null;
                   answerPlayers = [];

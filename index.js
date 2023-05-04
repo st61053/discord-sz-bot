@@ -307,21 +307,21 @@ client.on('interactionCreate', async (interaction) => {
                 } else {
                   playerTrys[interaction.user.id]++;
                 }
-                interaction.reply({ content: `Špatná odpověď - ${playerTrys[interaction.user.id]}/3`, ephemeral: true });
+                interaction.reply({ content: `Špatná odpověď - ${playerTrys[interaction.user.id]}/3`});
               }
             } else {
-              interaction.reply({ content: `Byl vyčerpán limit pokusů na odpověď.`, ephemeral: true });
+              interaction.reply({ content: `Byl vyčerpán limit pokusů na odpověď.`});
             }
 
           } else {
-            interaction.reply({ content: "Na dnešní otázku už bylo odpovězeno.", ephemeral: true });
+            interaction.reply({ content: "Na dnešní otázku už bylo odpovězeno."});
           }
 
         } else {
-          interaction.reply({ content: "Za dnešní otázku už si získal/a fazolky.", ephemeral: true });
+          interaction.reply({ content: "Za dnešní otázku už si získal/a fazolky."});
         }
       } else {
-        interaction.reply({ content: "Není tu nic, na co by se dalo odpovědět.", ephemeral: true });
+        interaction.reply({ content: "Není tu nic, na co by se dalo odpovědět."});
       }
     }
   }

@@ -51,7 +51,7 @@ var cron = require('node-cron');
 //   timezone: "Europe/Berlin"
 // });
 
-cron.schedule('25 0 * * *', () => {
+cron.schedule('32 0 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -352,7 +352,7 @@ client.on('interactionCreate', async (interaction) => {
 
     if (interaction.channel === channel) {
       if (answer) {
-        if (!answerPlayers.find(interaction.user.id)) {
+        if (!answerPlayers.find((id) => id === interaction.user.id)) {
           if (winnerCount < 5) {
             if (playerTrys[interaction.user.id] < 3) {
               if (answer === userAnswer.toLocaleLowerCase()) {

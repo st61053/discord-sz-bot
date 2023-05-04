@@ -38,7 +38,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('0 22 * * *', () => {
+cron.schedule('7 22 * * *', () => {
   if (detective) {
     detectivePike();
   }
@@ -61,6 +61,8 @@ const detectivePike = () => {
   const may = client.channels.cache.get('1096512941899129032');
   const inc = client.channels.cache.get('1096513016960389130');
 
+  const adm = client.channels.cache.get('1043954112900894874');
+
   const questionsRef = db.collection('questions');
   questionsRef.get()
     .then(async (querySnapshot) => {
@@ -82,9 +84,11 @@ const detectivePike = () => {
         let reply = "**Dnešní otázka zní:**\n\n";
         reply += `${q.q}`;
 
-        azt.send(`${reply}`);
-        may.send(`${reply}`);
-        inc.send(`${reply}`);
+        // azt.send(`${reply}`);
+        // may.send(`${reply}`);
+        // inc.send(`${reply}`);
+
+        adm.send(`${reply}`);
 
         const questRef = db.collection('questions').doc(q.id);
         await questRef.set({

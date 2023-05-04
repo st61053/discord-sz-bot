@@ -16,7 +16,7 @@ let incTry = 0;
 
 const reward = [30, 25, 20, 15, 10];
 const answerPlayers = [];
-const winnerCount = 0;
+let winnerCount = 0;
 const playerTrys = {};
 
 // Create a new client instance
@@ -43,7 +43,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('47 0 * * *', () => {
+cron.schedule('50 0 * * *', () => {
   if (detective) {
     detektivePike2();
   }

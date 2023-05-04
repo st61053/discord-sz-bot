@@ -35,7 +35,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('45 1 * * *', () => {
+cron.schedule('48 1 * * *', () => {
   if (detective) {
     detektivePike2();
   }

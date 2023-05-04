@@ -158,9 +158,9 @@ const detektivePike2 = () => {
 
         setTimeout(() => {
           answer = null;
-          aztTry = 0;
-          mayTry = 0;
-          incTry = 0;
+          answerPlayers = [];
+          winnerCount = 0;
+          playerTrys = {};
           console.log("Reset daily answer");
         }, 60 * 60 * 1000);
 

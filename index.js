@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 require('dotenv').config();
 const token = process.env.TOKEN;
 
-const detective = false;
+const detective = true;
 
 let answer = null;
 let aztAnswer = false;

@@ -43,15 +43,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-// cron.schedule('15 22 * * *', () => {
-//   if (detective) {
-//     detectivePike();
-//   }
-// }, {
-//   timezone: "Europe/Berlin"
-// });
-
-cron.schedule('42 0 * * *', () => {
+cron.schedule('47 0 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -64,66 +56,6 @@ cron.schedule('42 0 * * *', () => {
 const getLang = (value) => {
   const lang = value === 0 ? "í" : value > -5 && value < 5 ? "e" : "í";
   return `${value} fazol${lang}`;
-}
-
-const detectivePike = () => {
-  // Find the channel by its ID
-  // const channel = client.channels.cache.get('1099363680065433600');
-
-  const azt = client.channels.cache.get('1096512529917808771');
-  const may = client.channels.cache.get('1096512591846707200');
-  const inc = client.channels.cache.get('1096512657684709386');
-
-  //const adm = client.channels.cache.get('1043954112900894874');
-
-  const questionsRef = db.collection('questions');
-  questionsRef.get()
-    .then(async (querySnapshot) => {
-      const questions = [];
-      querySnapshot.forEach((doc) => {
-        questions.push({ id: doc.id, ...doc.data() });
-      });
-
-      const q = questions.find((quest) => quest.state);
-
-      if (q) {
-        answer = q.a.toLocaleLowerCase();
-        // Do something with the array of documents
-        console.log(`Today question: ${q.q}`);
-
-        // Send the message to the channel
-        // channel.send(`${q.q}`);
-
-        let reply = "**Dnešní otázka zní:**\n\n";
-        reply += `${q.q}`;
-
-        azt.send(`${reply}`);
-        may.send(`${reply}`);
-        inc.send(`${reply}`);
-
-        // adm.send(`${reply}`);
-
-        const questRef = db.collection("questions").doc(q.id);
-        await questRef.set({
-          ...q,
-          state: false
-        }, { merge: true });
-
-        setTimeout(() => {
-          answer = null;
-          answerPlayers = [];
-          winnerCount = 0;
-          playerTrys = {};
-          console.log("Reset daily answer");
-        }, 60 * 60 * 1000);
-
-      }
-
-    })
-    .catch((error) => {
-      console.log("Error getting documents: ", error);
-    });
-
 }
 
 const detektivePike2 = () => {
@@ -144,7 +76,7 @@ const detektivePike2 = () => {
         // Do something with the array of documents
         console.log(`Today question: ${q.q}`);
 
-        const reply = "**Dnešní otázka zní:**\n";
+        let reply = "**Dnešní otázka zní:**\n";
         reply += `${q.q}`;
 
         channel.send(`${reply}`);
@@ -386,111 +318,6 @@ client.on('interactionCreate', async (interaction) => {
         interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
       }
     }
-
-    //   if (interaction.channel === azt) {
-    //     if (answer) {
-    //       if (!aztAnswer) {
-    //         if (aztTry < 3) {
-    //           if (answer === userAnswer.toLocaleLowerCase()) {
-
-    //             const points = 10;
-
-    //             const userRef = db.collection('users').doc(interaction.user.id);
-    //             await userRef.set({
-    //               id: interaction.user.id,
-    //               messageCount: admin.firestore.FieldValue.increment(points)
-    //             }, { merge: true });
-
-
-    //             const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-    //             interaction.reply(`${interaction.user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
-
-    //             aztAnswer = true;
-    //           } else {
-    //             aztTry++;
-    //             interaction.reply(`Špatná odpověď - ${aztTry}/3`);
-    //           }
-    //         } else {
-    //           interaction.reply("Byl vyčerpán limit pokusů na odpověď.");
-    //         }
-
-    //       } else {
-    //         interaction.reply("Na dnešní otázku už bylo odpovězeno.");
-    //       }
-    //     } else {
-    //       interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
-    //     }
-    //   }
-
-    //   if (interaction.channel === may) {
-    //     if (answer) {
-    //       if (!mayAnswer) {
-    //         if (mayTry < 3) {
-    //           if (answer === userAnswer.toLocaleLowerCase()) {
-
-    //             const points = 10;
-
-    //             const userRef = db.collection('users').doc(interaction.user.id);
-    //             await userRef.set({
-    //               id: interaction.user.id,
-    //               messageCount: admin.firestore.FieldValue.increment(points)
-    //             }, { merge: true });
-
-
-    //             const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-    //             interaction.reply(`${interaction.user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
-
-    //             mayAnswer = true;
-    //           } else {
-    //             mayTry++;
-    //             interaction.reply(`Špatná odpověď - ${mayTry}/3`);
-    //           }
-    //         } else {
-    //           interaction.reply("Byl vyčerpán limit pokusů na odpověď.");
-    //         }
-
-    //       } else {
-    //         interaction.reply("Na dnešní otázku už bylo odpovězeno.");
-    //       }
-    //     } else {
-    //       interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
-    //     }
-    //   }
-
-    //   if (interaction.channel === inc) {
-    //     if (answer) {
-    //       if (!incAnswer) {
-    //         if (incTry < 3) {
-    //           if (answer === userAnswer.toLocaleLowerCase()) {
-
-    //             const points = 10;
-
-    //             const userRef = db.collection('users').doc(interaction.user.id);
-    //             await userRef.set({
-    //               id: interaction.user.id,
-    //               messageCount: admin.firestore.FieldValue.increment(points)
-    //             }, { merge: true });
-
-
-    //             const lang = points === 1 ? "i" : points < 5 ? "e" : "í";
-    //             interaction.reply(`${interaction.user} dostal příděl  **${points} fazol${lang}** od Bohů !`)
-
-    //             incAnswer = true;
-    //           } else {
-    //             incTry++;
-    //             interaction.reply(`Špatná odpověď - ${incTry}/3`);
-    //           }
-    //         } else {
-    //           interaction.reply("Byl vyčerpán limit pokusů na odpověď.");
-    //         }
-
-    //       } else {
-    //         interaction.reply("Na dnešní otázku už bylo odpovězeno.");
-    //       }
-    //     } else {
-    //       interaction.reply("Čas vypršel! Není tu nic, na co by se dalo odpovědět.");
-    //     }
-    //   }
   }
 
 })

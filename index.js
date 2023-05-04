@@ -53,7 +53,7 @@ var cron = require('node-cron');
 
 cron.schedule('25 0 * * *', () => {
   if (detective) {
-    detectivePike2();
+    detektivePike2();
   }
 }, {
   timezone: "Europe/Berlin"

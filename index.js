@@ -38,7 +38,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('7 22 * * *', () => {
+cron.schedule('15 22 * * *', () => {
   if (detective) {
     detectivePike();
   }
@@ -57,11 +57,11 @@ const detectivePike = () => {
   // Find the channel by its ID
   // const channel = client.channels.cache.get('1099363680065433600');
 
-  const azt = client.channels.cache.get('1096512802291716230');
-  const may = client.channels.cache.get('1096512941899129032');
-  const inc = client.channels.cache.get('1096513016960389130');
+  const azt = client.channels.cache.get('1096512529917808771');
+  const may = client.channels.cache.get('1096512591846707200');
+  const inc = client.channels.cache.get('1096512657684709386');
 
-  const adm = client.channels.cache.get('1043954112900894874');
+  //const adm = client.channels.cache.get('1043954112900894874');
 
   const questionsRef = db.collection('questions');
   questionsRef.get()
@@ -84,13 +84,13 @@ const detectivePike = () => {
         let reply = "**Dnešní otázka zní:**\n\n";
         reply += `${q.q}`;
 
-        // azt.send(`${reply}`);
-        // may.send(`${reply}`);
-        // inc.send(`${reply}`);
+        azt.send(`${reply}`);
+        may.send(`${reply}`);
+        inc.send(`${reply}`);
 
-        adm.send(`${reply}`);
+        // adm.send(`${reply}`);
 
-        const questRef = db.collection('questions').doc(q.id);
+        const questRef = db.collection("questions").doc(q.id);
         await questRef.set({
           ...q,
           state: false
@@ -282,9 +282,9 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.commandName === "answer") {
 
-    const azt = client.channels.cache.get('1096512802291716230');
-    const may = client.channels.cache.get('1096512941899129032');
-    const inc = client.channels.cache.get('1096513016960389130');
+    const azt = client.channels.cache.get('1096512529917808771');
+    const may = client.channels.cache.get('1096512591846707200');
+    const inc = client.channels.cache.get('1096512657684709386');
 
     const userAnswer = interaction.options.get('answer').value;
 

@@ -42,6 +42,8 @@ cron.schedule('0 21 * * *', () => {
   if (detective) {
     detectivePike();
   }
+}, {
+  timezone: "Europe/Berlin"
 });
 
 cron.schedule('30 20 * * *', () => {

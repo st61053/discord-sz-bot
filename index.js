@@ -35,7 +35,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('0 16 * * *', () => {
+cron.schedule('45 1 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -273,7 +273,7 @@ client.on('interactionCreate', async (interaction) => {
 
     if (interaction.channel === channel) {
       if (answer) {
-        if (!answerPlayers.find((id) => id === interaction.user.id)) {
+        if (!answerPlayers.find((user) => user === interaction.user)) {
           if (winnerCount < reward.length) {
             if (playerTrys[interaction.user.id] === undefined || playerTrys[interaction.user.id] < 3) {
               if (answer === userAnswer.toLocaleLowerCase()) {
@@ -285,13 +285,16 @@ client.on('interactionCreate', async (interaction) => {
                 }, { merge: true });
 
                 const lang = reward[winnerCount] === 1 ? "i" : reward[winnerCount] < 5 ? "e" : "í";
-                interaction.reply(`${interaction.user} dostal příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`)
+                interaction.reply({content: `${interaction.user} dostal příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`, ephemeral})
+                channel.send(`${interaction.user} odpověděl/a správně!`);
 
-                answerPlayers.push(interaction.user.id);
+                answerPlayers.push(interaction.user);
                 winnerCount++;
 
                 if (winnerCount === reward.length) {
-                  channel.send(`**Fazolky jsou rozdány!**\nSprávná odpověď byla: ${answer}`);
+                  let r = `**Fazolky jsou rozdány!**\nSprávná odpověď byla: ${answer}\n\n`;
+                  answerPlayers.forEach((user, i) => r += `${i + 1}. místo \t\t${user}\n`)
+                  channel.send(`${r}`);
                   answer = null;
                   answerPlayers = [];
                   winnerCount = 0;

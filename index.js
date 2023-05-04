@@ -82,18 +82,11 @@ const detectivePike = () => {
         // Do something with the array of documents
         console.log(`Today question: ${q.q}`);
 
-        roles = azt.guild.roles.cache
-          .filter(role => role.name === 'azték' || role.name === 'may' || role.name === 'ink')
-          .reduce((prev, role) => {
-            prev[role.id] = { roleObject: role };
-            return prev;
-          }, {})
-
         // Send the message to the channel
         // channel.send(`${q.q}`);
-        azt.send(`${roles[azt.id]?.roleObject} ové\n${q.q}`);
-        may.send(`${roles[may.id]?.roleObject} ové\n${q.q}`);
-        inc.send(`${roles[inc.id]?.roleObject} ové\n${q.q}`);
+        azt.send(`${q.q}`);
+        may.send(`${q.q}`);
+        inc.send(`${q.q}`);
 
         const questRef = db.collection('questions').doc(q.id);
         await questRef.set({

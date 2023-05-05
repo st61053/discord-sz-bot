@@ -37,20 +37,7 @@ var cron = require('node-cron');
 
 cron.schedule('0 16 * * *', () => {
   if (detective) {
-    detektivePike2();
-  }
-}, {
-  timezone: "Europe/Berlin"
-});
-
-cron.schedule('0 17 * * *', () => {
-  if (answer) {
-    channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
-    answer = null;
-    answerPlayers = [];
-    winnerCount = 0;
-    playerTrys = {};
-    console.log("Reset daily answer");
+    //detektivePike2();
   }
 }, {
   timezone: "Europe/Berlin"
@@ -89,6 +76,20 @@ const detektivePike2 = () => {
           ...q,
           state: false
         }, { merge: true });
+
+        const timer = setTimeout(() => {
+          if (answer) {
+            channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
+            answer = null;
+            answerPlayers = [];
+            winnerCount = 0;
+            playerTrys = {};
+            console.log("Reset daily answer");
+          }
+        }, 60 * 60 * 1000);
+
+        clearTimeout(timer);
+
       }
 
     })

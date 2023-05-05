@@ -37,13 +37,11 @@ var cron = require('node-cron');
 
 cron.schedule('0 16 * * *', () => {
   if (detective) {
-    detektivePike2();
+    //detektivePike2();
   }
 }, {
   timezone: "Europe/Berlin"
 });
-
-
 
 const getLang = (value) => {
   const lang = value === 0 ? "í" : value > -5 && value < 5 ? "e" : "í";

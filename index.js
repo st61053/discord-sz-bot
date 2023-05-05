@@ -6,7 +6,7 @@ const token = process.env.TOKEN;
 const detective = true;
 
 let answer = null;
-let reward = [25, 20];
+let reward = [25, 20, 15, 10, 5];
 let answerPlayers = [];
 let winnerCount = 0;
 let playerTrys = {};
@@ -35,7 +35,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('8 2 * * *', () => {
+cron.schedule('0 16 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -285,7 +285,7 @@ client.on('interactionCreate', async (interaction) => {
                 }, { merge: true });
 
                 const lang = reward[winnerCount] === 1 ? "i" : reward[winnerCount] < 5 ? "e" : "í";
-                interaction.reply({content: `${interaction.user} dostal příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`, ephemeral: true})
+                interaction.reply({content: `${interaction.user} dostal/a příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`, ephemeral: true})
                 channel.send(`${interaction.user} odpověděl/a správně!`);
 
                 answerPlayers.push(interaction.user);

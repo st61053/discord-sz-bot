@@ -5,11 +5,11 @@ const token = process.env.TOKEN;
 
 const detective = true;
 
-let answer = null;
-let reward = [25, 20, 15, 10, 5];
-let answerPlayers = [];
-let winnerCount = 0;
-let playerTrys = {};
+// let answer = null;
+// let reward = [25, 20, 15, 10, 5];
+// let answerPlayers = [];
+// let winnerCount = 0;
+// let playerTrys = {};
 
 // Create a new client instance
 const client = new Client({

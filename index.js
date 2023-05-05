@@ -54,7 +54,7 @@ const detektivePike2 = () => {
   const questionsRef = db.collection('questions');
 
   // Build a query to filter by state=true
-  const query = collectionRef.where("state", "==", true).limit(1);
+  const query = questionsRef.where("state", "==", true).limit(1);
 
   // Execute the query
   query.get().then(async (querySnapshot) => {
@@ -75,11 +75,13 @@ const detektivePike2 = () => {
 
       channel.send(`${reply}`);
 
-      const questRef = db.collection("questions").doc(data.id);
-      await questRef.set({
-        ...data,
-        state: false
-      }, { merge: true });
+      // const questRef = db.collection("questions").doc(data.id);
+      // await questRef.set({
+      //   ...data,
+      //   state: false
+      // }, { merge: true });
+
+      questionsRef.doc(data.id).update({ state: false })
 
       setTimeout(() => {
         if (answer) {

@@ -6,7 +6,7 @@ const token = process.env.TOKEN;
 const detective = true;
 
 let answer = null;
-let reward = [35];
+let reward = [25, 20];
 let answerPlayers = [];
 let winnerCount = 0;
 let playerTrys = {};
@@ -35,7 +35,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('53 1 * * *', () => {
+cron.schedule('3 2 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -307,21 +307,21 @@ client.on('interactionCreate', async (interaction) => {
                 } else {
                   playerTrys[interaction.user.id]++;
                 }
-                interaction.reply({ content: `Špatná odpověď - ${playerTrys[interaction.user.id]}/3`});
+                interaction.reply({ content: `${interaction.user} Špatná odpověď - ${playerTrys[interaction.user.id]}/3`});
               }
             } else {
-              interaction.reply({ content: `Byl vyčerpán limit pokusů na odpověď.`});
+              interaction.reply({ content: `${interaction.user} Byl vyčerpán limit pokusů na odpověď.`});
             }
 
           } else {
-            interaction.reply({ content: "Na dnešní otázku už bylo odpovězeno."});
+            interaction.reply({ content: `${interaction.user} Na dnešní otázku už bylo odpovězeno.`});
           }
 
         } else {
-          interaction.reply({ content: "Za dnešní otázku už si získal/a fazolky."});
+          interaction.reply({ content: `${interaction.user} Za dnešní otázku už si získal/a fazolky."`});
         }
       } else {
-        interaction.reply({ content: "Není tu nic, na co by se dalo odpovědět."});
+        interaction.reply({ content: `${interaction.user} Není tu nic, na co by se dalo odpovědět.`});
       }
     }
   }

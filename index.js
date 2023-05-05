@@ -5,11 +5,11 @@ const token = process.env.TOKEN;
 
 const detective = true;
 
-// let answer = null;
-// let reward = [25, 20, 15, 10, 5];
-// let answerPlayers = [];
-// let winnerCount = 0;
-// let playerTrys = {};
+let answer = null;
+let reward = [25, 20, 15, 10, 5];
+let answerPlayers = [];
+let winnerCount = 0;
+let playerTrys = {};
 
 // Create a new client instance
 const client = new Client({
@@ -35,7 +35,7 @@ client.once(Events.ClientReady, c => {
 
 var cron = require('node-cron');
 
-cron.schedule('0 16 * * *', () => {
+cron.schedule('5 14 * * *', () => {
   if (detective) {
     detektivePike2();
   }
@@ -48,105 +48,105 @@ const getLang = (value) => {
   return `${value} fazol${lang}`;
 }
 
-// const detektivePike2 = () => {
-//   const channel = client.channels.cache.get('1103795567450144829');
+const detektivePike2 = () => {
+  const channel = client.channels.cache.get('1103795567450144829');
 
-//   const questionsRef = db.collection('questions');
+  const questionsRef = db.collection('questions');
 
-//   // Build a query to filter by state=true
-//   const query = questionsRef.where("state", "==", true).limit(1);
+  // Build a query to filter by state=true
+  const query = questionsRef.where("state", "==", true).limit(1);
 
-//   // Execute the query
-//   query.get().then(async (querySnapshot) => {
-//     // Check if there is a document that matches the query
-//     if (!querySnapshot.empty) {
-//       // Get the first document in the result set
-//       const document = querySnapshot.docs[0];
-//       // Access the data of the document
-//       const data = document.data();
-//       console.log("Document data:", data);
+  // Execute the query
+  query.get().then(async (querySnapshot) => {
+    // Check if there is a document that matches the query
+    if (!querySnapshot.empty) {
+      // Get the first document in the result set
+      const document = querySnapshot.docs[0];
+      // Access the data of the document
+      const data = document.data();
+      console.log("Document data:", data);
 
-//       answer = data.a.toLocaleLowerCase();
-//       // Do something with the array of documents
-//       console.log(`Today question: ${data.q}`);
+      answer = data.a.toLocaleLowerCase();
+      // Do something with the array of documents
+      console.log(`Today question: ${data.q}`);
 
-//       let reply = "**Dnešní otázka zní:**\n";
-//       reply += `${data.q}`;
+      let reply = "**Dnešní otázka zní:**\n";
+      reply += `${data.q}`;
 
-//       channel.send(`${reply}`);
+      channel.send(`${reply}`);
 
-//       // const questRef = db.collection("questions").doc(data.id);
-//       // await questRef.set({
-//       //   ...data,
-//       //   state: false
-//       // }, { merge: true });
+      // const questRef = db.collection("questions").doc(data.id);
+      // await questRef.set({
+      //   ...data,
+      //   state: false
+      // }, { merge: true });
 
-//       questionsRef.doc(data.id).update({ state: false })
+      questionsRef.doc(data.id).update({ state: false })
 
-//       setTimeout(() => {
-//         if (answer) {
-//           channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
-//           answer = null;
-//           answerPlayers = [];
-//           winnerCount = 0;
-//           playerTrys = {};
-//           console.log("Reset daily answer");
-//         }
-//       }, 60 * 60 * 1000);
+      setTimeout(() => {
+        if (answer) {
+          channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
+          answer = null;
+          answerPlayers = [];
+          winnerCount = 0;
+          playerTrys = {};
+          console.log("Reset daily answer");
+        }
+      }, 60 * 60 * 1000);
 
-//     } else {
-//       console.log("No documents found");
-//     }
-//   }).catch((error) => {
-//     console.log("Error getting documents:", error);
-//   });
+    } else {
+      console.log("No documents found");
+    }
+  }).catch((error) => {
+    console.log("Error getting documents:", error);
+  });
 
 
 
-//   // questionsRef.get()
-//   //   .then(async (querySnapshot) => {
-//   //     const questions = [];
-//   //     querySnapshot.forEach((doc) => {
-//   //       questions.push({ id: doc.id, ...doc.data() });
-//   //     });
+  // questionsRef.get()
+  //   .then(async (querySnapshot) => {
+  //     const questions = [];
+  //     querySnapshot.forEach((doc) => {
+  //       questions.push({ id: doc.id, ...doc.data() });
+  //     });
 
-//   //     const q = questions.find((quest) => quest.state);
+  //     const q = questions.find((quest) => quest.state);
 
-//   //     if (q) {
-//   //       answer = q.a.toLocaleLowerCase();
-//   //       // Do something with the array of documents
-//   //       console.log(`Today question: ${q.q}`);
+  //     if (q) {
+  //       answer = q.a.toLocaleLowerCase();
+  //       // Do something with the array of documents
+  //       console.log(`Today question: ${q.q}`);
 
-//   //       let reply = "**Dnešní otázka zní:**\n";
-//   //       reply += `${q.q}`;
+  //       let reply = "**Dnešní otázka zní:**\n";
+  //       reply += `${q.q}`;
 
-//   //       channel.send(`${reply}`);
+  //       channel.send(`${reply}`);
 
-//   //       const questRef = db.collection("questions").doc(q.id);
-//   //       await questRef.set({
-//   //         ...q,
-//   //         state: false
-//   //       }, { merge: true });
+  //       const questRef = db.collection("questions").doc(q.id);
+  //       await questRef.set({
+  //         ...q,
+  //         state: false
+  //       }, { merge: true });
 
-//   //       const timer = setTimeout(() => {
-//   //         if (answer) {
-//   //           channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
-//   //           answer = null;
-//   //           answerPlayers = [];
-//   //           winnerCount = 0;
-//   //           playerTrys = {};
-//   //           console.log("Reset daily answer");
-//   //         }
-//   //       }, 60 * 60 * 1000);
+  //       const timer = setTimeout(() => {
+  //         if (answer) {
+  //           channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
+  //           answer = null;
+  //           answerPlayers = [];
+  //           winnerCount = 0;
+  //           playerTrys = {};
+  //           console.log("Reset daily answer");
+  //         }
+  //       }, 60 * 60 * 1000);
 
-//   //     }
+  //     }
 
-//   //   })
-//   //   .catch((error) => {
-//   //     console.log("Error getting documents: ", error);
-//   //   });
+  //   })
+  //   .catch((error) => {
+  //     console.log("Error getting documents: ", error);
+  //   });
 
-// }
+}
 
 // commands
 client.on('interactionCreate', async (interaction) => {
@@ -320,59 +320,59 @@ client.on('interactionCreate', async (interaction) => {
 
     const userAnswer = interaction.options.get('answer').value;
 
-    // if (interaction.channel === channel) {
-    //   if (answer) {
-    //     if (!answerPlayers.find((user) => user === interaction.user)) {
-    //       if (winnerCount < reward.length) {
-    //         if (playerTrys[interaction.user.id] === undefined || playerTrys[interaction.user.id] < 3) {
-    //           if (answer === userAnswer.toLocaleLowerCase()) {
+    if (interaction.channel === channel) {
+      if (answer) {
+        if (!answerPlayers.find((user) => user === interaction.user)) {
+          if (winnerCount < reward.length) {
+            if (playerTrys[interaction.user.id] === undefined || playerTrys[interaction.user.id] < 3) {
+              if (answer === userAnswer.toLocaleLowerCase()) {
 
-    //             const userRef = db.collection('users').doc(interaction.user.id);
-    //             await userRef.set({
-    //               id: interaction.user.id,
-    //               messageCount: admin.firestore.FieldValue.increment(reward[winnerCount])
-    //             }, { merge: true });
+                const userRef = db.collection('users').doc(interaction.user.id);
+                await userRef.set({
+                  id: interaction.user.id,
+                  messageCount: admin.firestore.FieldValue.increment(reward[winnerCount])
+                }, { merge: true });
 
-    //             const lang = reward[winnerCount] === 1 ? "i" : reward[winnerCount] < 5 ? "e" : "í";
-    //             interaction.reply({ content: `${interaction.user} dostal/a příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`, ephemeral: true })
-    //             channel.send(`${interaction.user} odpověděl/a správně!`);
+                const lang = reward[winnerCount] === 1 ? "i" : reward[winnerCount] < 5 ? "e" : "í";
+                interaction.reply({ content: `${interaction.user} dostal/a příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`, ephemeral: true })
+                channel.send(`${interaction.user} odpověděl/a správně!`);
 
-    //             answerPlayers.push(interaction.user);
-    //             winnerCount++;
+                answerPlayers.push(interaction.user);
+                winnerCount++;
 
-    //             if (winnerCount === reward.length) {
-    //               let r = `**Fazolky jsou rozdány!**\nSprávná odpověď byla: ${answer}\n\n`;
-    //               answerPlayers.forEach((user, i) => r += `${i + 1}. místo \t\t${user}\n`)
-    //               channel.send(`${r}`);
-    //               answer = null;
-    //               answerPlayers = [];
-    //               winnerCount = 0;
-    //               playerTrys = {};
-    //             }
+                if (winnerCount === reward.length) {
+                  let r = `**Fazolky jsou rozdány!**\nSprávná odpověď byla: ${answer}\n\n`;
+                  answerPlayers.forEach((user, i) => r += `${i + 1}. místo \t\t${user}\n`)
+                  channel.send(`${r}`);
+                  answer = null;
+                  answerPlayers = [];
+                  winnerCount = 0;
+                  playerTrys = {};
+                }
 
-    //           } else {
-    //             if (!playerTrys[interaction.user.id]) {
-    //               playerTrys[interaction.user.id] = 1;
-    //             } else {
-    //               playerTrys[interaction.user.id]++;
-    //             }
-    //             interaction.reply({ content: `${interaction.user} Špatná odpověď - ${playerTrys[interaction.user.id]}/3` });
-    //           }
-    //         } else {
-    //           interaction.reply({ content: `${interaction.user} Byl vyčerpán limit pokusů na odpověď.` });
-    //         }
+              } else {
+                if (!playerTrys[interaction.user.id]) {
+                  playerTrys[interaction.user.id] = 1;
+                } else {
+                  playerTrys[interaction.user.id]++;
+                }
+                interaction.reply({ content: `${interaction.user} Špatná odpověď - ${playerTrys[interaction.user.id]}/3` });
+              }
+            } else {
+              interaction.reply({ content: `${interaction.user} Byl vyčerpán limit pokusů na odpověď.` });
+            }
 
-    //       } else {
-    //         interaction.reply({ content: `${interaction.user} Na dnešní otázku už bylo odpovězeno.` });
-    //       }
+          } else {
+            interaction.reply({ content: `${interaction.user} Na dnešní otázku už bylo odpovězeno.` });
+          }
 
-    //     } else {
-    //       interaction.reply({ content: `${interaction.user} Za dnešní otázku už si získal/a fazolky."` });
-    //     }
-    //   } else {
-    //     interaction.reply({ content: `${interaction.user} Není tu nic, na co by se dalo odpovědět.` });
-    //   }
-    // }
+        } else {
+          interaction.reply({ content: `${interaction.user} Za dnešní otázku už si získal/a fazolky."` });
+        }
+      } else {
+        interaction.reply({ content: `${interaction.user} Není tu nic, na co by se dalo odpovědět.` });
+      }
+    }
   }
 
 })

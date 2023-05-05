@@ -37,7 +37,7 @@ var cron = require('node-cron');
 
 cron.schedule('0 16 * * *', () => {
   if (detective) {
-    //detektivePike2();
+    detektivePike2();
   }
 }, {
   timezone: "Europe/Berlin"
@@ -77,7 +77,7 @@ const detektivePike2 = () => {
           state: false
         }, { merge: true });
 
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           if (answer) {
             channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
             answer = null;
@@ -87,6 +87,8 @@ const detektivePike2 = () => {
             console.log("Reset daily answer");
           }
         }, 60 * 60 * 1000);
+
+        clearTimeout(timer);
 
       }
 

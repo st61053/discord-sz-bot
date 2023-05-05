@@ -320,59 +320,59 @@ client.on('interactionCreate', async (interaction) => {
 
     const userAnswer = interaction.options.get('answer').value;
 
-    if (interaction.channel === channel) {
-      if (answer) {
-        if (!answerPlayers.find((user) => user === interaction.user)) {
-          if (winnerCount < reward.length) {
-            if (playerTrys[interaction.user.id] === undefined || playerTrys[interaction.user.id] < 3) {
-              if (answer === userAnswer.toLocaleLowerCase()) {
+    // if (interaction.channel === channel) {
+    //   if (answer) {
+    //     if (!answerPlayers.find((user) => user === interaction.user)) {
+    //       if (winnerCount < reward.length) {
+    //         if (playerTrys[interaction.user.id] === undefined || playerTrys[interaction.user.id] < 3) {
+    //           if (answer === userAnswer.toLocaleLowerCase()) {
 
-                const userRef = db.collection('users').doc(interaction.user.id);
-                await userRef.set({
-                  id: interaction.user.id,
-                  messageCount: admin.firestore.FieldValue.increment(reward[winnerCount])
-                }, { merge: true });
+    //             const userRef = db.collection('users').doc(interaction.user.id);
+    //             await userRef.set({
+    //               id: interaction.user.id,
+    //               messageCount: admin.firestore.FieldValue.increment(reward[winnerCount])
+    //             }, { merge: true });
 
-                const lang = reward[winnerCount] === 1 ? "i" : reward[winnerCount] < 5 ? "e" : "í";
-                interaction.reply({ content: `${interaction.user} dostal/a příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`, ephemeral: true })
-                channel.send(`${interaction.user} odpověděl/a správně!`);
+    //             const lang = reward[winnerCount] === 1 ? "i" : reward[winnerCount] < 5 ? "e" : "í";
+    //             interaction.reply({ content: `${interaction.user} dostal/a příděl  **${reward[winnerCount]} fazol${lang}** od Bohů za správnou odpověď!`, ephemeral: true })
+    //             channel.send(`${interaction.user} odpověděl/a správně!`);
 
-                answerPlayers.push(interaction.user);
-                winnerCount++;
+    //             answerPlayers.push(interaction.user);
+    //             winnerCount++;
 
-                if (winnerCount === reward.length) {
-                  let r = `**Fazolky jsou rozdány!**\nSprávná odpověď byla: ${answer}\n\n`;
-                  answerPlayers.forEach((user, i) => r += `${i + 1}. místo \t\t${user}\n`)
-                  channel.send(`${r}`);
-                  answer = null;
-                  answerPlayers = [];
-                  winnerCount = 0;
-                  playerTrys = {};
-                }
+    //             if (winnerCount === reward.length) {
+    //               let r = `**Fazolky jsou rozdány!**\nSprávná odpověď byla: ${answer}\n\n`;
+    //               answerPlayers.forEach((user, i) => r += `${i + 1}. místo \t\t${user}\n`)
+    //               channel.send(`${r}`);
+    //               answer = null;
+    //               answerPlayers = [];
+    //               winnerCount = 0;
+    //               playerTrys = {};
+    //             }
 
-              } else {
-                if (!playerTrys[interaction.user.id]) {
-                  playerTrys[interaction.user.id] = 1;
-                } else {
-                  playerTrys[interaction.user.id]++;
-                }
-                interaction.reply({ content: `${interaction.user} Špatná odpověď - ${playerTrys[interaction.user.id]}/3` });
-              }
-            } else {
-              interaction.reply({ content: `${interaction.user} Byl vyčerpán limit pokusů na odpověď.` });
-            }
+    //           } else {
+    //             if (!playerTrys[interaction.user.id]) {
+    //               playerTrys[interaction.user.id] = 1;
+    //             } else {
+    //               playerTrys[interaction.user.id]++;
+    //             }
+    //             interaction.reply({ content: `${interaction.user} Špatná odpověď - ${playerTrys[interaction.user.id]}/3` });
+    //           }
+    //         } else {
+    //           interaction.reply({ content: `${interaction.user} Byl vyčerpán limit pokusů na odpověď.` });
+    //         }
 
-          } else {
-            interaction.reply({ content: `${interaction.user} Na dnešní otázku už bylo odpovězeno.` });
-          }
+    //       } else {
+    //         interaction.reply({ content: `${interaction.user} Na dnešní otázku už bylo odpovězeno.` });
+    //       }
 
-        } else {
-          interaction.reply({ content: `${interaction.user} Za dnešní otázku už si získal/a fazolky."` });
-        }
-      } else {
-        interaction.reply({ content: `${interaction.user} Není tu nic, na co by se dalo odpovědět.` });
-      }
-    }
+    //     } else {
+    //       interaction.reply({ content: `${interaction.user} Za dnešní otázku už si získal/a fazolky."` });
+    //     }
+    //   } else {
+    //     interaction.reply({ content: `${interaction.user} Není tu nic, na co by se dalo odpovědět.` });
+    //   }
+    // }
   }
 
 })

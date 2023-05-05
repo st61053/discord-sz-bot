@@ -43,6 +43,19 @@ cron.schedule('0 16 * * *', () => {
   timezone: "Europe/Berlin"
 });
 
+cron.schedule('0 17 * * *', () => {
+  if (answer) {
+    channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
+    answer = null;
+    answerPlayers = [];
+    winnerCount = 0;
+    playerTrys = {};
+    console.log("Reset daily answer");
+  }
+}, {
+  timezone: "Europe/Berlin"
+});
+
 const getLang = (value) => {
   const lang = value === 0 ? "í" : value > -5 && value < 5 ? "e" : "í";
   return `${value} fazol${lang}`;
@@ -76,20 +89,6 @@ const detektivePike2 = () => {
           ...q,
           state: false
         }, { merge: true });
-
-        const timer = setTimeout(() => {
-          if (answer) {
-            channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
-            answer = null;
-            answerPlayers = [];
-            winnerCount = 0;
-            playerTrys = {};
-            console.log("Reset daily answer");
-          }
-        }, 60 * 60 * 1000);
-
-        clearTimeout(timer);
-
       }
 
     })

@@ -70,7 +70,9 @@ const detektivePike2 = () => {
 
       setTimeout(() => {
         if (answer) {
-          channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
+          let r = `**Čas vypršel!**\nSprávná odpověď byla: ${answer}\n\n`;
+          answerPlayers.forEach((user, i) => r += `${i + 1}. místo \t\t${user}\n`)
+          channel.send(`${r}`);
           answer = null;
           answerPlayers = [];
           winnerCount = 0;

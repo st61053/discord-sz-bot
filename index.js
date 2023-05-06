@@ -317,6 +317,7 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.commandName === "start") {
     detektivePike2();
+    interaction.reply(`Detektiv štika spuštěn!`);
   }
 
 })

@@ -33,62 +33,62 @@ client.once(Events.ClientReady, c => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
-var cron = require('node-cron');
+// var cron = require('node-cron');
 
-cron.schedule('0 18 * * *', () => {
-  if (detective) {
-    detektivePike2();
-  }
-}, {
-  timezone: "Europe/Berlin"
-});
+// cron.schedule('0 18 * * *', () => {
+//   if (detective) {
+//     detektivePike2();
+//   }
+// }, {
+//   timezone: "Europe/Berlin"
+// });
 
 const getLang = (value) => {
   const lang = value === 0 ? "í" : value > -5 && value < 5 ? "e" : "í";
   return `${value} fazol${lang}`;
 }
 
-const detektivePike2 = () => {
-  const channel = client.channels.cache.get('1103795567450144829');
+// const detektivePike2 = () => {
+//   const channel = client.channels.cache.get('1103795567450144829');
 
-  // Execute the query
-  db.collection('questions').where("state", "==", true).limit(1).get().then((querySnapshot) => {
-    // Check if there is a document that matches the query
-    if (!querySnapshot.empty) {
+//   // Execute the query
+//   db.collection('questions').where("state", "==", true).limit(1).get().then((querySnapshot) => {
+//     // Check if there is a document that matches the query
+//     if (!querySnapshot.empty) {
 
-      // Access the data of the document
-      const data = querySnapshot.docs[0].data();
+//       // Access the data of the document
+//       const data = querySnapshot.docs[0].data();
 
-      answer = data.a.toLocaleLowerCase();
-      // Do something with the array of documents
-      console.log(`Today question: ${data.q}`);
+//       answer = data.a.toLocaleLowerCase();
+//       // Do something with the array of documents
+//       console.log(`Today question: ${data.q}`);
 
-      let reply = "**Dnešní otázka zní:**\n";
-      reply += `${data.q}`;
+//       let reply = "**Dnešní otázka zní:**\n";
+//       reply += `${data.q}`;
 
-      channel.send(`${reply}`);
+//       channel.send(`${reply}`);
 
-      db.collection('questions').doc(data.id).update({ state: false })
+//       db.collection('questions').doc(data.id).update({ state: false })
 
-      setTimeout(() => {
-        if (answer) {
-          channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
-          answer = null;
-          answerPlayers = [];
-          winnerCount = 0;
-          playerTrys = {};
-          console.log("Reset daily answer");
-        }
-      }, 60 * 60 * 1000);
+//       setTimeout(() => {
+//         if (answer) {
+//           channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
+//           answer = null;
+//           answerPlayers = [];
+//           winnerCount = 0;
+//           playerTrys = {};
+//           console.log("Reset daily answer");
+//         }
+//       }, 60 * 60 * 1000);
 
-    } else {
-      console.log("No documents found");
-    }
-  }).catch((error) => {
-    console.log("Error getting documents:", error);
-  });
+//     } else {
+//       console.log("No documents found");
+//     }
+//   }).catch((error) => {
+//     console.log("Error getting documents:", error);
+//   });
 
-}
+// }
 
 // commands
 client.on('interactionCreate', async (interaction) => {

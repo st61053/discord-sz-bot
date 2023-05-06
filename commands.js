@@ -66,6 +66,10 @@ const commands = [
             },
         ]
     },
+    {
+        name: "start",
+        description: 'Start detective pike',
+    },
 ]
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);

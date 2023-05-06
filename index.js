@@ -3,8 +3,6 @@ const admin = require('firebase-admin');
 require('dotenv').config();
 const token = process.env.TOKEN;
 
-const detective = true;
-
 let answer = null;
 let reward = [25, 20, 15, 10, 5];
 let answerPlayers = [];
@@ -48,47 +46,47 @@ const getLang = (value) => {
   return `${value} fazol${lang}`;
 }
 
-// const detektivePike2 = () => {
-//   const channel = client.channels.cache.get('1103795567450144829');
+const detektivePike2 = () => {
+  const channel = client.channels.cache.get('1103795567450144829');
 
-//   // Execute the query
-//   db.collection('questions').where("state", "==", true).limit(1).get().then((querySnapshot) => {
-//     // Check if there is a document that matches the query
-//     if (!querySnapshot.empty) {
+  // Execute the query
+  db.collection('questions').where("state", "==", true).limit(1).get().then((querySnapshot) => {
+    // Check if there is a document that matches the query
+    if (!querySnapshot.empty) {
 
-//       // Access the data of the document
-//       const data = querySnapshot.docs[0].data();
+      // Access the data of the document
+      const data = querySnapshot.docs[0].data();
 
-//       answer = data.a.toLocaleLowerCase();
-//       // Do something with the array of documents
-//       console.log(`Today question: ${data.q}`);
+      answer = data.a.toLocaleLowerCase();
+      // Do something with the array of documents
+      console.log(`Today question: ${data.q}`);
 
-//       let reply = "**Dnešní otázka zní:**\n";
-//       reply += `${data.q}`;
+      let reply = "**Dnešní otázka zní:**\n";
+      reply += `${data.q}`;
 
-//       channel.send(`${reply}`);
+      channel.send(`${reply}`);
 
-//       db.collection('questions').doc(data.id).update({ state: false })
+      db.collection('questions').doc(data.id).update({ state: false })
 
-//       setTimeout(() => {
-//         if (answer) {
-//           channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
-//           answer = null;
-//           answerPlayers = [];
-//           winnerCount = 0;
-//           playerTrys = {};
-//           console.log("Reset daily answer");
-//         }
-//       }, 60 * 60 * 1000);
+      setTimeout(() => {
+        if (answer) {
+          channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
+          answer = null;
+          answerPlayers = [];
+          winnerCount = 0;
+          playerTrys = {};
+          console.log("Reset daily answer");
+        }
+      }, 60 * 60 * 1000);
 
-//     } else {
-//       console.log("No documents found");
-//     }
-//   }).catch((error) => {
-//     console.log("Error getting documents:", error);
-//   });
+    } else {
+      console.log("No documents found");
+    }
+  }).catch((error) => {
+    console.log("Error getting documents:", error);
+  });
 
-// }
+}
 
 // commands
 client.on('interactionCreate', async (interaction) => {
@@ -315,6 +313,10 @@ client.on('interactionCreate', async (interaction) => {
         interaction.reply({ content: `${interaction.user} Není tu nic, na co by se dalo odpovědět.` });
       }
     }
+  }
+
+  if (interaction.commandName === "start") {
+    detektivePike2();
   }
 
 })

@@ -51,20 +51,13 @@ const getLang = (value) => {
 const detektivePike2 = () => {
   const channel = client.channels.cache.get('1103795567450144829');
 
-  const questionsRef = db.collection('questions');
-
-  // Build a query to filter by state=true
-  const query = questionsRef.where("state", "==", true).limit(1);
-
   // Execute the query
-  query.get().then(async (querySnapshot) => {
+  db.collection('questions').where("state", "==", true).limit(1).get().then((querySnapshot) => {
     // Check if there is a document that matches the query
     if (!querySnapshot.empty) {
-      // Get the first document in the result set
-      const document = querySnapshot.docs[0];
+
       // Access the data of the document
-      const data = document.data();
-      console.log("Document data:", data);
+      const data = querySnapshot.docs[0].data();
 
       answer = data.a.toLocaleLowerCase();
       // Do something with the array of documents
@@ -75,13 +68,7 @@ const detektivePike2 = () => {
 
       channel.send(`${reply}`);
 
-      // const questRef = db.collection("questions").doc(data.id);
-      // await questRef.set({
-      //   ...data,
-      //   state: false
-      // }, { merge: true });
-
-      questionsRef.doc(data.id).update({ state: false })
+      db.collection('questions').doc(data.id).update({ state: false })
 
       setTimeout(() => {
         if (answer) {
@@ -100,51 +87,6 @@ const detektivePike2 = () => {
   }).catch((error) => {
     console.log("Error getting documents:", error);
   });
-
-
-
-  // questionsRef.get()
-  //   .then(async (querySnapshot) => {
-  //     const questions = [];
-  //     querySnapshot.forEach((doc) => {
-  //       questions.push({ id: doc.id, ...doc.data() });
-  //     });
-
-  //     const q = questions.find((quest) => quest.state);
-
-  //     if (q) {
-  //       answer = q.a.toLocaleLowerCase();
-  //       // Do something with the array of documents
-  //       console.log(`Today question: ${q.q}`);
-
-  //       let reply = "**Dnešní otázka zní:**\n";
-  //       reply += `${q.q}`;
-
-  //       channel.send(`${reply}`);
-
-  //       const questRef = db.collection("questions").doc(q.id);
-  //       await questRef.set({
-  //         ...q,
-  //         state: false
-  //       }, { merge: true });
-
-  //       const timer = setTimeout(() => {
-  //         if (answer) {
-  //           channel.send(`**Čas vypršel!**\nSprávná odpověď byla: ${answer}`);
-  //           answer = null;
-  //           answerPlayers = [];
-  //           winnerCount = 0;
-  //           playerTrys = {};
-  //           console.log("Reset daily answer");
-  //         }
-  //       }, 60 * 60 * 1000);
-
-  //     }
-
-  //   })
-  //   .catch((error) => {
-  //     console.log("Error getting documents: ", error);
-  //   });
 
 }
 

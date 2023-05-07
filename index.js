@@ -320,9 +320,9 @@ client.on('interactionCreate', async (interaction) => {
   }
 
   if (interaction.commandName === "penis") {
-    const randomNum = Math.random() * (25 - 3) + 3;
+    const randomNum = Math.random() * (12 - 2) + 2;
     const l =  Number(randomNum.toFixed(2));
-    interaction.reply(`${interaction.user} má penis dlouhý ${l}cm.`);
+    interaction.reply(`${interaction.user} má penis dlouhý ${l} palců.`);
   }
 
 })

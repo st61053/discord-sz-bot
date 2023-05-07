@@ -223,7 +223,7 @@ client.on('interactionCreate', async (interaction) => {
               return prev;
             }, {})
 
-          Promise.all(Object.keys(results).map(async (key) => {
+          Promise.all(Object.keys(results).map((key) => {
             results[key]["user"] = fields.filter((field) => {
               return field.role === key;
             });
@@ -237,8 +237,8 @@ client.on('interactionCreate', async (interaction) => {
                 reply += `---------------------------------------\n\n`;
               }
             })
-            console.log("Heloooooooooooooooooooooooooo");
-            interaction.reply(`${reply}`)
+            console.log(interaction.commandName);
+            interaction.reply(`${reply}`);
           }).catch((error) => {
             console.error(error); // handle the error appropriately
           });

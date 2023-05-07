@@ -216,8 +216,6 @@ client.on('interactionCreate', async (interaction) => {
         })
         .then(async (fields) => {
 
-          //console.log(fields);
-
           results = interaction.guild.roles.cache
             .filter(role => role.name === 'azték' || role.name === 'may' || role.name === 'ink')
             .reduce((prev, role) => {
@@ -230,29 +228,22 @@ client.on('interactionCreate', async (interaction) => {
               return field.role === key;
             });
           })).then(() => {
-            // console.log(results); // or do something else with the results
+            const id = interaction.commandName === 'get-aztecs-points' ? '1096512802291716230' : interaction.commandName === 'get-mayans-points' ? '1096512941899129032' : '1096513016960389130';
+            Object.keys(results).forEach((key) => {
+              if (key === id) {
+                reply += `${results[key]?.roleObject} ové - celkem **${getLang(results[key]?.user.reduce((prev, user) => prev + user.value, 0))}**\n`;
+                reply += `---------------------------------------\n`;
+                results[key]?.user.forEach((user) => reply += `${user.user}\t**${getLang(user.value)}**\n`)
+                reply += `---------------------------------------\n\n`;
+              }
+            })
+            console.log("Heloooooooooooooooooooooooooo");
+            interaction.reply(`${reply}`)
           }).catch((error) => {
             console.error(error); // handle the error appropriately
           });
 
-        }).then(() => {
-
-          const id = interaction.commandName === 'get-aztecs-points' ? '1096512802291716230' : interaction.commandName === 'get-mayans-points' ? '1096512941899129032' : '1096513016960389130';
-          Object.keys(results).forEach((key) => {
-            if (key === id) {
-              reply += `${results[key]?.roleObject} ové - celkem **${getLang(results[key]?.user.reduce((prev, user) => prev + user.value, 0))}**\n`;
-              reply += `---------------------------------------\n`;
-              results[key]?.user.forEach((user) => reply += `${user.user}\t**${getLang(user.value)}**\n`)
-              reply += `---------------------------------------\n\n`;
-            }
-          })
-
-
-          interaction.reply(`${reply}`)
         })
-        .catch((error) => {
-          console.log("Error getting documents: ", error);
-        });
     }
 
   }

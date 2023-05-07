@@ -319,7 +319,13 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.commandName === "start") {
     detektivePike2();
-    interaction.reply(`Detektiv štika spuštěn!`);
+    interaction.reply(`Detektiv Štika spuštěn!`);
+  }
+
+  if (interaction.commandName === "prepare") {
+    const channel = client.channels.cache.get('1103795567450144829');
+    interaction.reply(`Detektiv Štika připraven ke spuštění.`);
+    channel.send("**Připravte se, detektiv Štika brzo začne.**");
   }
 
 })

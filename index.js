@@ -319,6 +319,12 @@ client.on('interactionCreate', async (interaction) => {
     channel.send("**Připravte se, detektiv Štika brzo začne.**");
   }
 
+  if (interaction.commandName === "penis") {
+    const randomNum = Math.random() * (25 - 3) + 3;
+    const l =  Number(randomNum.toFixed(2));
+    interaction.reply(`${interaction.user} má penis dlouhý ${l}cm.`);
+  }
+
 })
 
 // Log in to Discord with your client's token

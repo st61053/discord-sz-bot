@@ -73,6 +73,10 @@ const commands = [
     {
         name: "prepare",
         description: 'Get ready for detective pike',
+    },
+    {
+        name: "penis",
+        description: 'Get length of the penis'
     }
 ]
 
